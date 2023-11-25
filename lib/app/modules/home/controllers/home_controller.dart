@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,6 +58,15 @@ class HomeController extends GetxController {
         "https://youtu.be/V4f5vAPR_VM?si=7aGnWxIZ26-onFf2"
       ],
     ),
+  ]);
+  RxList<Category> playlistsCat = RxList<Category>.of([
+    Category(id: 1, name: "ทำอาหาร"),
+    Category(id: 2, name: "ธรรมมะ"),
+    Category(id: 3, name: "ศิลปะ"),
+    Category(id: 4, name: "เทคโนโลยี"),
+    Category(id: 5, name: "สงบใจ"),
+    Category(id: 6, name: "ศึกษาทั่วไป"),
+    Category(id: 7, name: "ออกกำลังกาย"),
   ]);
 
   @override
