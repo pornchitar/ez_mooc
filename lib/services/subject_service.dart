@@ -3,25 +3,15 @@ import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class SubjectService extends GetxService {
   Rx<Subject> currentPlaylist = Subject().obs;
   RxList<EnrollMent> enrollments = <EnrollMent>[].obs;
   Rx<String> currentVDO = "".obs;
-  late YoutubePlayerController yourYoutubePlayerController;
 
   @override
   void onInit() {
     super.onInit();
-
-    yourYoutubePlayerController = YoutubePlayerController(
-      initialVideoId: currentVDO.value,
-      flags: YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
   }
 
   @override
@@ -64,8 +54,6 @@ class SubjectService extends GetxService {
 
     if (videoId.isNotEmpty) {
       currentVDO.value = videoId;
-      yourYoutubePlayerController.load(videoId);
-      yourYoutubePlayerController.play();
     } else {
       print('Invalid YouTube URL');
     }

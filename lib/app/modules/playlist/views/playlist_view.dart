@@ -51,7 +51,6 @@ class _PlaylistViewState extends State<PlaylistView> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SubjectService>().yourYoutubePlayerController;
     return Scaffold(
       appBar: AppBar(
         title: Obx(() => Text('${subjectService.currentPlaylist.value.name}')),
@@ -59,22 +58,6 @@ class _PlaylistViewState extends State<PlaylistView> {
       ),
       body: Column(
         children: [
-          Container(
-            width: double.infinity,
-            child: YoutubePlayer(
-              controller: subjectService.yourYoutubePlayerController =
-                  YoutubePlayerController(
-                initialVideoId: subjectService.getCurrentVdo(),
-                flags: const YoutubePlayerFlags(
-                  autoPlay: true,
-                  mute: false,
-                ),
-              ),
-              onEnded: (data) {
-                print('Video has ended.');
-              },
-            ),
-          ),
           Expanded(
             // Add an Expanded widget
             child: FutureBuilder(
@@ -111,9 +94,7 @@ class _PlaylistViewState extends State<PlaylistView> {
                                   .getCurrentPlaylist()
                                   .vdos![index]
                                   .toString());
-                          Get.find<SubjectService>()
-                              .yourYoutubePlayerController
-                              .load(subjectService.getCurrentVdo());
+                          Get.toNamed('/vdo-page', arguments: video.id.value);
                         },
                       );
                     },
