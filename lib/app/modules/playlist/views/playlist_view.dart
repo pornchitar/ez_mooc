@@ -94,6 +94,7 @@ class _PlaylistViewState extends State<PlaylistView> {
                                   .getCurrentPlaylist()
                                   .vdos![index]
                                   .toString());
+                          Get.find<SubjectService>().indexVdo.value = index;
                           Get.toNamed('/vdo-page', arguments: video.id.value);
                         },
                       );

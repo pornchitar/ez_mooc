@@ -3,7 +3,7 @@ import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/user_model.dart';
 
 class EnrollMent {
-  final String id;
+  final int id;
   final Subject subject;
   final User user;
   final bool isCompleted;

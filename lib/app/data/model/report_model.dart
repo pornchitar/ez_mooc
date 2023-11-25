@@ -1,5 +1,5 @@
 class Report {
-  final String id;
+  final int id;
   final List<double> values;
 
   Report({

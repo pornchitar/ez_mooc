@@ -31,9 +31,23 @@ class VdoPageController extends GetxController {
             youtubePlayerController.value.position.inSeconds /
                 youtubePlayerController.value.metaData.duration.inSeconds *
                 100;
+        Get.find<SubjectService>()
+                .enrollments[Get.find<SubjectService>().currentVdoId.value]
+                .report
+                .values[Get.find<SubjectService>().indexVdo.value] =
+            percentageWatched.value;
         print(
             'Video paused. Track the history here. ${percentageWatched.toStringAsPrecision(2)}%');
         print("--------------------------------");
+        for (int i = 0;
+            i < Get.find<SubjectService>().enrollments.length;
+            i++) {
+          print(Get.find<SubjectService>()
+              .enrollments[i]
+              .report
+              .values
+              .toString());
+        }
       }
 
       // You can add more conditions based on your requirements
