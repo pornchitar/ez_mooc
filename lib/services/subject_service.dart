@@ -25,16 +25,25 @@ class SubjectService extends GetxService {
     return currentPlaylist.value;
   }
 
-  // Add enrollment
   void addEnrollment(Subject playlist) {
-    if (!enrollments.value.contains(playlist)) {
+    // Check if the subject is already enrolled
+    bool isEnrolled =
+        enrollments.any((enrollment) => enrollment.subject.id == playlist.id);
+
+    if (!isEnrolled) {
       enrollments.add(EnrollMent(
-          id: "1",
-          subject: playlist,
-          user: Get.find<UserService>().getCurrentUser(),
-          isCompleted: false,
-          report: Report(id: "1", values: [])));
+        id: "1",
+        subject: playlist,
+        user: Get.find<UserService>().getCurrentUser(),
+        isCompleted: false,
+        report: Report(id: "1", values: []),
+      ));
+
+      print('Enrollment added successfully.');
+    } else {
+      print('Subject is already enrolled.');
     }
+
     print(enrollments.length);
   }
 
