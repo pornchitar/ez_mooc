@@ -23,6 +23,16 @@ class VdoPageController extends GetxController {
 
     youtubePlayerController.addListener(() {
       if (youtubePlayerController.value.playerState == PlayerState.ended) {
+        percentageWatched.value = 100;
+        for (int i = 0;
+            i < Get.find<SubjectService>().enrollments.length;
+            i++) {
+          print(Get.find<SubjectService>()
+              .enrollments[i]
+              .report
+              .values
+              .toString());
+        }
         print('Video ended. Track the history here.');
       } else if (youtubePlayerController.value.playerState ==
           PlayerState.paused) {
