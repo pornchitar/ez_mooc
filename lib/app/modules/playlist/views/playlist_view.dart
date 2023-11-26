@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:ez_mooc/components/BottomNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 import 'package:get/get.dart';
@@ -106,6 +107,7 @@ class _PlaylistViewState extends State<PlaylistView> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

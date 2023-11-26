@@ -14,7 +14,7 @@ class SubjectService extends GetxService {
 
   RxInt lastIdReport = 0.obs;
   RxInt indexVdo = 1.obs;
-  var selectedItem = 0.obs;
+  var selectedItem = 2.obs;
 
   void changeSelectedItem(int index) {
     selectedItem.value = index;

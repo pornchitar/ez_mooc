@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:ez_mooc/components/BottomNavigation.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
@@ -53,13 +54,23 @@ class EnrollmentView extends GetView {
                                 percent:
                                     enrollment.report.values.elementAt(index) /
                                         100,
-                                center: Text(
-                                  "${enrollment.report.values.elementAt(index).toStringAsPrecision(2)}%",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 8.0,
-                                  ),
-                                ),
+                                center:
+                                    enrollment.report.values.elementAt(index) ==
+                                            100
+                                        ? Text(
+                                            "100%",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 8.0,
+                                            ),
+                                          )
+                                        : Text(
+                                            "${enrollment.report.values.elementAt(index).toStringAsPrecision(2)}%",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 8.0,
+                                            ),
+                                          ),
                                 backgroundColor:
                                     Color.fromARGB(255, 254, 236, 236),
                                 progressColor:
@@ -99,6 +110,7 @@ class EnrollmentView extends GetView {
           }
         }),
       ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 

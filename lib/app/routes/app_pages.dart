@@ -6,6 +6,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/playlist/bindings/playlist_binding.dart';
 import '../modules/playlist/views/playlist_view.dart';
+import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/profile_view.dart';
 import '../modules/vdo_page/bindings/vdo_page_binding.dart';
 import '../modules/vdo_page/views/vdo_page_view.dart';
 
@@ -36,6 +38,11 @@ class AppPages {
       name: _Paths.VDO_PAGE,
       page: () => const VdoPageView(),
       binding: VdoPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE,
+      page: () => const ProfileView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

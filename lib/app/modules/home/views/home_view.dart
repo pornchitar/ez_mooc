@@ -1,4 +1,5 @@
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/components/BottomNavigation.dart';
 import 'package:ez_mooc/components/VideoCard.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:flutter/material.dart';
@@ -56,50 +57,7 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      bottomNavigationBar: GetBuilder<HomeController>(
-        builder: (controller) => BottomNavigationBar(
-          unselectedItemColor: Colors.black54,
-          backgroundColor: Colors.grey[300],
-          type: BottomNavigationBarType.fixed,
-          selectedFontSize: 0.0,
-          unselectedFontSize: 0.0,
-          currentIndex: Get.find<SubjectService>().selectedItem.value,
-          onTap: (index) {
-            Get.find<SubjectService>().changeSelectedItem(index);
-            if (Get.find<SubjectService>().selectedItem.value == 2) {
-              Get.toNamed('/home');
-            } else if (Get.find<SubjectService>().selectedItem.value == 0) {
-              Get.toNamed('/enrollment');
-            } else if (Get.find<SubjectService>().selectedItem.value == 3) {
-              Get.toNamed('/history');
-            } else if (Get.find<SubjectService>().selectedItem.value == 4) {
-              Get.toNamed('/profile');
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.play_circle),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, size: 45.0),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history_rounded),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_2),
-              label: '',
-            ),
-          ],
-        ),
-      ),
+      bottomNavigationBar: BottomNavigation(),
     );
   }
 }

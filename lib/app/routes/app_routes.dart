@@ -7,6 +7,7 @@ abstract class Routes {
   static const PLAYLIST = _Paths.PLAYLIST;
   static const ENROLLMENT = _Paths.ENROLLMENT;
   static const VDO_PAGE = _Paths.VDO_PAGE;
+  static const PROFILE = _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const PLAYLIST = '/playlist';
   static const ENROLLMENT = '/enrollment';
   static const VDO_PAGE = '/vdo-page';
+  static const PROFILE = '/profile';
 }

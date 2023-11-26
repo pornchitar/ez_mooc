@@ -24,6 +24,11 @@ class VdoPageController extends GetxController {
     youtubePlayerController.addListener(() {
       if (youtubePlayerController.value.playerState == PlayerState.ended) {
         percentageWatched.value = 100;
+        Get.find<SubjectService>()
+                .enrollments[Get.find<SubjectService>().currentVdoId.value]
+                .report
+                .values[Get.find<SubjectService>().indexVdo.value] =
+            percentageWatched.value;
         for (int i = 0;
             i < Get.find<SubjectService>().enrollments.length;
             i++) {

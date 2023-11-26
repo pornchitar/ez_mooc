@@ -1,3 +1,4 @@
+import 'package:ez_mooc/services/home_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:get/get.dart';
 
@@ -10,5 +11,6 @@ class PlaylistBinding extends Bindings {
       () => PlaylistController(),
     );
     Get.put(SubjectService());
+    Get.put(NavigationController());
   }
 }
