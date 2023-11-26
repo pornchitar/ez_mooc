@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -5,6 +7,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class VdoPageController extends GetxController {
   late YoutubePlayerController youtubePlayerController;
   RxDouble percentageWatched = 0.0.obs;
+  Timer? saveTimer;
 
   @override
   void onInit() {
@@ -22,51 +25,43 @@ class VdoPageController extends GetxController {
     );
 
     youtubePlayerController.addListener(() {
+      // Handle video state changes
       if (youtubePlayerController.value.playerState == PlayerState.ended) {
-        percentageWatched.value = 100;
-        Get.find<SubjectService>()
-                .enrollments[Get.find<SubjectService>().currentVdoId.value]
-                .report
-                .values[Get.find<SubjectService>().indexVdo.value] =
-            percentageWatched.value;
-        for (int i = 0;
-            i < Get.find<SubjectService>().enrollments.length;
-            i++) {
-          print(Get.find<SubjectService>()
-              .enrollments[i]
-              .report
-              .values
-              .toString());
-        }
+        savePercentageWatched(100);
         print('Video ended. Track the history here.');
       } else if (youtubePlayerController.value.playerState ==
           PlayerState.paused) {
         print("--------------------------------");
-        percentageWatched.value =
-            youtubePlayerController.value.position.inSeconds /
-                youtubePlayerController.value.metaData.duration.inSeconds *
-                100;
-        Get.find<SubjectService>()
-                .enrollments[Get.find<SubjectService>().currentVdoId.value]
-                .report
-                .values[Get.find<SubjectService>().indexVdo.value] =
-            percentageWatched.value;
+        double percentage = calculatePercentageWatched(youtubePlayerController);
+        savePercentageWatched(percentage);
         print(
-            'Video paused. Track the history here. ${percentageWatched.toStringAsPrecision(2)}%');
+            'Video paused. Track the history here. ${percentage.toStringAsPrecision(2)}%');
         print("--------------------------------");
-        for (int i = 0;
-            i < Get.find<SubjectService>().enrollments.length;
-            i++) {
-          print(Get.find<SubjectService>()
-              .enrollments[i]
-              .report
-              .values
-              .toString());
-        }
+      } else if (youtubePlayerController.value.playerState ==
+          PlayerState.playing) {
+        saveTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+          double percentage =
+              calculatePercentageWatched(youtubePlayerController);
+          savePercentageWatched(percentage);
+          print(
+              'Saving percentage every 5 minutes: ${percentage.toStringAsPrecision(2)}%');
+        });
       }
-
-      // You can add more conditions based on your requirements
     });
+  }
+
+  double calculatePercentageWatched(YoutubePlayerController controller) {
+    return controller.value.position.inSeconds /
+        controller.value.metaData.duration.inSeconds *
+        100;
+  }
+
+  void savePercentageWatched(double percentage) {
+    // Save the percentage watched to your data structure
+    Get.find<SubjectService>()
+        .enrollments[Get.find<SubjectService>().currentVdoId.value]
+        .report
+        .values[Get.find<SubjectService>().indexVdo.value] = percentage;
   }
 
   @override
