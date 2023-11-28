@@ -102,7 +102,6 @@ Future<VideoDetails> extractPlaylistInfo(String playlistUrl) async {
     var playlistId = PlaylistId(playlistUrl);
     var playlist = await ytClient.playlists.get(playlistId);
 
-    // Get the first video in the playlist
     var firstVideo = await ytClient.playlists.getVideos(playlistId).first;
     print('First video: ${firstVideo.url}');
     var videoDetails = VideoDetails(
@@ -118,7 +117,6 @@ Future<VideoDetails> extractPlaylistInfo(String playlistUrl) async {
         channelName: "Error",
         views: "Error",
         thumpNail: "Error");
-    // Handle the error as needed
   } finally {
     ytClient.close();
   }
