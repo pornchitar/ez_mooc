@@ -1,39 +1,39 @@
-import 'dart:convert';
+import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 
 class Subject {
-  int? id;
-  String? url;
-  String? name;
-  String? author;
-  List<String>? vdos;
+  final int sub_id;
+  final String sub_name;
+  final int category_id;
+  final int user_id;
+  final String Youtube_playlist_id;
+  final List<Video> video;
 
-  Subject({
-    this.id,
-    this.url,
-    this.name,
-    this.author,
-    this.vdos,
-  });
+  Subject(
+      {required this.sub_id,
+      required this.sub_name,
+      required this.category_id,
+      required this.user_id,
+      required this.Youtube_playlist_id,
+      required this.video});
 
-  factory Subject.fromRawJson(String str) => Subject.fromJson(json.decode(str));
+  factory Subject.fromJson(Map<String, dynamic> json) {
+    return Subject(
+      sub_id: json['sub_id'],
+      sub_name: json['sub_name'],
+      category_id: json['category_id'],
+      user_id: json['user_id'],
+      Youtube_playlist_id: json['Youtube_playlist_id'],
+      video: json['video'],
+    );
+  }
 
-  String toRawJson() => json.encode(toJson());
-
-  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
-        id: json["id"],
-        url: json["url"],
-        name: json["name"],
-        author: json["author"],
-        vdos: json["vdos"] == null
-            ? []
-            : List<String>.from(json["vdos"]!.map((x) => x)),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "url": url,
-        "name": name,
-        "author": author,
-        "vdos": vdos == null ? [] : List<dynamic>.from(vdos!.map((x) => x)),
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'sub_id': sub_id,
+      'sub_name': sub_name,
+      'category_id': category_id,
+      'user_id': user_id,
+      'Youtube_playlist_id': Youtube_playlist_id
+    };
+  }
 }

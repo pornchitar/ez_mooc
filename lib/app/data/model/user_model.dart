@@ -1,23 +1,43 @@
 class User {
-  final String id;
-  final String name;
-  final String lastName;
+  int user_id;
+  String user_name;
+  String user_password;
+  String image;
+  String user_phone;
+  DateTime created_at;
+  String role;
 
   User({
-    required this.id,
-    required this.name,
-    required this.lastName,
+    required this.user_id,
+    required this.user_name,
+    required this.user_password,
+    required this.image,
+    required this.user_phone,
+    required this.created_at,
+    required this.role,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        name: json["name"],
-        lastName: json["lastName"],
-      );
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      user_id: json['user_id'],
+      user_name: json['user_name'],
+      user_password: json['user_password'],
+      image: json['image'],
+      user_phone: json['user_phone'],
+      created_at: DateTime.parse(json['created_at']),
+      role: json['role'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "lastName": lastName,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'user_id': user_id,
+      'user_name': user_name,
+      'user_password': user_password,
+      'image': image,
+      'user_phone': user_phone,
+      'created_at': created_at.toIso8601String(),
+      'role': role,
+    };
+  }
 }
