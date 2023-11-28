@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:ez_mooc/components/BottomNavigation.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
@@ -110,7 +109,6 @@ class EnrollmentView extends GetView {
           }
         }),
       ),
-      bottomNavigationBar: BottomNavigation(),
     );
   }
 

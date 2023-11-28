@@ -8,6 +8,9 @@ abstract class Routes {
   static const ENROLLMENT = _Paths.ENROLLMENT;
   static const VDO_PAGE = _Paths.VDO_PAGE;
   static const PROFILE = _Paths.PROFILE;
+  static const MAIN = _Paths.MAIN;
+  static const HISTORY = _Paths.HISTORY;
+  static const LIKE_VDO = _Paths.LIKE_VDO;
 }
 
 abstract class _Paths {
@@ -17,4 +20,7 @@ abstract class _Paths {
   static const ENROLLMENT = '/enrollment';
   static const VDO_PAGE = '/vdo-page';
   static const PROFILE = '/profile';
+  static const MAIN = '/main';
+  static const HISTORY = '/history';
+  static const LIKE_VDO = '/like-vdo';
 }

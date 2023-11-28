@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/profile_controller.dart';
+import '../controllers/history_controller.dart';
 
-class ProfileView extends GetView<ProfileController> {
-  const ProfileView({Key? key}) : super(key: key);
+class HistoryView extends GetView<HistoryController> {
+  const HistoryView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProfileView'),
+        title: const Text('HistoryView'),
         centerTitle: true,
       ),
       body: const Center(
         child: Text(
-          'ProfileView is working',
+          'HistoryView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),

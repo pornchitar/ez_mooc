@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/profile_controller.dart';
+import '../controllers/like_vdo_controller.dart';
 
-class ProfileView extends GetView<ProfileController> {
-  const ProfileView({Key? key}) : super(key: key);
+class LikeVdoView extends GetView<LikeVdoController> {
+  const LikeVdoView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProfileView'),
+        title: const Text('LikeVdoView'),
         centerTitle: true,
       ),
       body: const Center(
         child: Text(
-          'ProfileView is working',
+          'LikeVdoView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),
