@@ -13,48 +13,66 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Image.asset(
-          'images/youtube.jpg', // Replace with the path to your YouTube logo image
-          height: 50.0,
+        toolbarHeight: 80.0,
+        backgroundColor: Color.fromRGBO(144, 94, 150, 1),
+        title: Row(
+          children: [
+            Image.asset(
+              'images/logo.png', // Replace with the path to your YouTube logo image
+              height: 70.0,
+            ),
+            SizedBox(width: 10.0),
+            Text(
+              'EZ MOOC',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              // Implement search functionality
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: controller
-                  .playlists.length, // Replace with the actual number of videos
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  child: Obx(
-                    () => VideoCard(
-                      videoUrl: controller.playlists[index].url.toString(),
-                    ),
-                  ),
-                  onTap: () {
-                    Get.toNamed('/playlist',
-                        arguments: controller.playlists[index]);
-                    Get.find<SubjectService>()
-                        .setCurrentPlaylist(controller.playlists[index]);
-                    Get.find<SubjectService>()
-                        .addEnrollment(controller.playlists[index]);
-                    Get.find<SubjectService>().setCurrentVdo(
-                        controller.playlists[index].vdos![0].toString());
-                  },
-                );
-              },
+            onPressed: () {},
+            icon: Image.asset(
+              'images/find.png', // Replace with the path to your play_circle image
+              height: 50.0,
             ),
           ),
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.playlists
+                    .length, // Replace with the actual number of videos
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    child: Obx(
+                      () => VideoCard(
+                        videoUrl: controller.playlists[index].url.toString(),
+                      ),
+                    ),
+                    onTap: () {
+                      Get.toNamed('/playlist',
+                          arguments: controller.playlists[index]);
+                      Get.find<SubjectService>()
+                          .setCurrentPlaylist(controller.playlists[index]);
+                      Get.find<SubjectService>()
+                          .addEnrollment(controller.playlists[index]);
+                      Get.find<SubjectService>().setCurrentVdo(
+                          controller.playlists[index].vdos![0].toString());
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       // bottomNavigationBar: BottomNavigation(),
     );

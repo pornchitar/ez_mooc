@@ -16,38 +16,56 @@ class MainView extends GetView<MainController> {
       body: Obx(() {
         return _getBody(controller.selectedItem.value);
       }),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.black54,
-        backgroundColor: Colors.grey[300],
-        type: BottomNavigationBarType.fixed,
-        selectedFontSize: 0.0,
-        unselectedFontSize: 0.0,
-        currentIndex: controller.selectedItem.value,
-        onTap: (index) {
-          controller.changeSelectedItem(index);
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_circle),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 45.0),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history_rounded),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_2),
-            label: '',
-          ),
-        ],
+      bottomNavigationBar: SizedBox(
+        height: 80.0,
+        child: BottomNavigationBar(
+          unselectedItemColor: Colors.black54,
+          backgroundColor: Color.fromRGBO(144, 94, 150, 1),
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 0.0,
+          unselectedFontSize: 0.0,
+          currentIndex: controller.selectedItem.value,
+          onTap: (index) {
+            controller.changeSelectedItem(index);
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'images/TV.png', // Replace with the path to your play_circle image
+                height: 50.0,
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'images/win.png', // Replace with the path to your bookmark image
+                height: 50.0,
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'images/home.png', // Replace with the path to your home image
+                height: 50.0,
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'images/heart.png', // Replace with the path to your history_rounded image
+                height: 50.0,
+              ),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'images/profile.png', // Replace with the path to your person_2 image
+                height: 50.0,
+              ),
+              label: '',
+            ),
+          ],
+        ),
       ),
     );
   }
