@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ez_mooc/app/data/model/enrollment_model.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -56,12 +57,34 @@ class VdoPageController extends GetxController {
         100;
   }
 
+  // void savePercentageWatched(double percentage) {
+  //   // Save the percentage watched to your data structure
+  //   Get.find<SubjectService>()
+  //       .enrollments[Get.find<SubjectService>().currentVdoId.value]
+  //       .report
+  //       .values[Get.find<SubjectService>().indexVdo.value] = percentage;
+
+  // }
   void savePercentageWatched(double percentage) {
-    // Save the percentage watched to your data structure
-    Get.find<SubjectService>()
-        .enrollments[Get.find<SubjectService>().currentVdoId.value]
-        .report
-        .values[Get.find<SubjectService>().indexVdo.value] = percentage;
+    int currentVideoId = Get.find<SubjectService>().currentVdoId.value;
+    int indexVideo = Get.find<SubjectService>().indexVdo.value;
+
+    List<Enrollment> enrollments = Get.find<SubjectService>().enrollments;
+
+    Enrollment currentEnrollment = enrollments.firstWhere(
+      (enrollment) => enrollment.subjectId == currentVideoId,
+      orElse: () =>
+          throw Exception("Enrollment not found for video ID: $currentVideoId"),
+    );
+
+    var progress = currentEnrollment.progress.firstWhere(
+        (element) => element.videoId == indexVideo,
+        orElse: () =>
+            throw Exception("Progress not found for video ID: $indexVideo"));
+    progress.progressPercentage = percentage;
+    currentEnrollment.progress[indexVideo] = progress;
+    enrollments[currentVideoId] = currentEnrollment;
+    Get.find<SubjectService>().setEnrollments(enrollments);
   }
 
   @override

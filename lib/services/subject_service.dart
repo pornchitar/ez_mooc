@@ -36,6 +36,11 @@ class SubjectService extends GetxService {
     currentPlaylist.value = playlist;
   }
 
+  //set enrollment
+  void setEnrollments(List<Enrollment> enrollments) {
+    this.enrollments.value = enrollments;
+  }
+
   Subject getCurrentPlaylist() {
     return currentPlaylist.value;
   }
@@ -51,7 +56,8 @@ class SubjectService extends GetxService {
           enrollmentId: lastIdReport.value,
           userId: Get.find<UserService>().getCurrentUser().user_id,
           subjectId: playlist.subjectId,
-          enrollmentDate: DateTime.now()));
+          enrollmentDate: DateTime.now(),
+          progress: []));
       currentVdoId.value = lastIdReport.value;
       lastIdReport.value++;
       print('Enrollment added successfully.');

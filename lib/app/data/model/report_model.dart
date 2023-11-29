@@ -2,7 +2,7 @@ class Progress {
   int progressId;
   int userId;
   int videoId;
-  int progressPercentage;
+  double progressPercentage;
   DateTime lastViewedTimestamp;
 
   Progress({
