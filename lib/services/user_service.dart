@@ -25,7 +25,6 @@ class UserService extends GetxService {
     currentUser.value = user;
   }
 
-  //get the current user
   User getCurrentUser() {
     return currentUser.value;
   }

@@ -11,8 +11,6 @@ class SubjectService extends GetxService {
   Rx<Subject> currentPlaylist =
       Subject(subjectId: 1, subjectName: "", description: "", playlistLink: "")
           .obs;
-  RxList<VdoDetail> vdoPlaylists = RxList<VdoDetail>.of([]);
-
   RxList<Enrollment> enrollments = <Enrollment>[].obs;
   Rx<String> currentVDO = "".obs;
   RxInt currentVdoId = 1.obs;
@@ -35,10 +33,8 @@ class SubjectService extends GetxService {
 
   void setCurrentPlaylist(Subject playlist) {
     currentPlaylist.value = playlist;
-    // vdoPlaylists.value = playlist.
   }
 
-  //set enrollment
   void setEnrollments(List<Enrollment> enrollments) {
     this.enrollments.value = enrollments;
   }
@@ -49,7 +45,6 @@ class SubjectService extends GetxService {
 
   void addEnrollment(Subject playlist) {
     currentVdoId.value = 1;
-    // Check if the subject is already enrolled
     bool isEnrolled = enrollments
         .any((enrollment) => enrollment.subjectId == playlist.subjectId);
 
@@ -72,12 +67,10 @@ class SubjectService extends GetxService {
     print(enrollments.length);
   }
 
-  // Remove enrollment
   void removeEnrollment(Subject playlist) {
     enrollments.remove(playlist);
   }
 
-  //get the currentVdo
   String getCurrentVdo() {
     return currentVDO.value;
   }
