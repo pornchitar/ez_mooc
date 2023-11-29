@@ -11,6 +11,7 @@ class SubjectService extends GetxService {
   Rx<Subject> currentPlaylist =
       Subject(subjectId: 1, subjectName: "", description: "", playlistLink: "")
           .obs;
+  RxList<VdoDetail> vdoPlaylists = RxList<VdoDetail>.of([]);
 
   RxList<Enrollment> enrollments = <Enrollment>[].obs;
   Rx<String> currentVDO = "".obs;
@@ -34,6 +35,7 @@ class SubjectService extends GetxService {
 
   void setCurrentPlaylist(Subject playlist) {
     currentPlaylist.value = playlist;
+    // vdoPlaylists.value = playlist.
   }
 
   //set enrollment

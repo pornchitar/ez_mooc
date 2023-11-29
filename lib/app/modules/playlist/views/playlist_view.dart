@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 import 'package:get/get.dart';
@@ -26,16 +27,16 @@ class _PlaylistViewState extends State<PlaylistView> {
     playlistController = Get.find<PlaylistController>();
   }
 
-  Future<List<yt.Video>> fetchAllVideoData(List<String> vdpUrls) async {
+  Future<List<yt.Video>> fetchAllVideoData(List<VdoDetail> playlistUrl) async {
     var ytClient = yt.YoutubeExplode();
     List<yt.Video> videos = [];
 
     try {
-      for (var vdourl in vdpUrls) {
+      for (var vdourl in playlistUrl) {
         var regExp = RegExp(
             r'^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})');
 
-        var match = regExp.firstMatch(vdourl);
+        var match = regExp.firstMatch(vdourl.videoUrl);
         if (match != null && match.groupCount >= 1) {
           var vdourl = match.group(1);
           var video = await ytClient.videos.get(yt.VideoId(vdourl.toString()));
@@ -53,7 +54,8 @@ class _PlaylistViewState extends State<PlaylistView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(() => Text('${subjectService.currentPlaylist.value.name}')),
+        title: Obx(
+            () => Text('${subjectService.currentPlaylist.value.description}')),
         centerTitle: true,
       ),
       body: Column(
@@ -63,10 +65,9 @@ class _PlaylistViewState extends State<PlaylistView> {
             child: FutureBuilder(
               key: Key(Get.find<SubjectService>()
                   .getCurrentPlaylist()
-                  .id
+                  .subjectId
                   .toString()),
-              future:
-                  fetchAllVideoData(subjectService.currentPlaylist.value.vdos!),
+              future: fetchAllVideoData(subjectService.vdoPlaylists),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -89,11 +90,7 @@ class _PlaylistViewState extends State<PlaylistView> {
                         title: Text(video.title),
                         subtitle: Text(video.author),
                         onTap: () {
-                          Get.find<SubjectService>().setCurrentVdo(
-                              subjectService
-                                  .getCurrentPlaylist()
-                                  .vdos![index]
-                                  .toString());
+                          Get.find<SubjectService>().setCurrentVdo(video.url);
                           Get.find<SubjectService>().indexVdo.value = index;
                           Get.toNamed('/vdo-page', arguments: video.id.value);
                         },
