@@ -3,10 +3,34 @@ import 'package:get/get.dart';
 
 class VdoDetailService extends GetxService {
   RxList<VdoDetail> vdoPlaylists = RxList<VdoDetail>.of([]).obs();
+  Rx<VdoDetail> currentDetail = VdoDetail(
+          id: 1,
+          videoId: "",
+          subjectId: 1,
+          videoTitle: "",
+          videoUrl: "",
+          channelName: "",
+          thumbnail: "")
+      .obs;
+  RxString currentVdoUrl = "".obs;
 
   //get vdoPlaylists
-  List<VdoDetail> get getVdoPlaylists => vdoPlaylists.value;
+  List<VdoDetail> getVdoPlaylists() {
+    return vdoPlaylists.value;
+  }
+
   //set vdoPlaylists
-  set setVdoPlaylists(List<VdoDetail> vdoPlaylists) =>
-      this.vdoPlaylists.value = vdoPlaylists;
+  void setVdoPlaylists(List<VdoDetail> list) {
+    vdoPlaylists.value = list;
+  }
+
+  //get current vdo
+  VdoDetail getCurrentVdo() {
+    return currentDetail.value;
+  }
+
+  //set current vdo
+  void setCurrentVdo(VdoDetail vdo) {
+    currentDetail.value = vdo;
+  }
 }

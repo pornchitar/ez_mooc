@@ -1,6 +1,7 @@
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/components/VideoCard.dart';
 import 'package:ez_mooc/services/subject_service.dart';
+import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -64,25 +65,20 @@ class HomeView extends GetView<HomeController> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: controller.playlists.length,
+              itemCount: Get.find<SubjectService>().playlists.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   child: Obx(
                     () => VideoCard(
-                      videoUrl: controller.playlists[index].playlistLink,
+                      videoUrl: Get.find<SubjectService>()
+                          .playlists[index]
+                          .playlistLink,
                     ),
+                    // () => Container(
+                    //   child: Text("header"),
+                    // ),
                   ),
-                  onTap: () {
-                    Get.toNamed('/playlist',
-                        arguments: controller.playlists[index]);
-                    Get.find<SubjectService>()
-                        .setCurrentPlaylist(controller.playlists[index]);
-                    Get.find<SubjectService>()
-                        .addEnrollment(controller.playlists[index]);
-                    Get.find<SubjectService>().setCurrentVdo(controller
-                        .playlists[index].playlistLink![0]
-                        .toString());
-                  },
+                  onTap: () {},
                 );
               },
             ),

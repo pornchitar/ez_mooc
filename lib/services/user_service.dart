@@ -13,13 +13,6 @@ class UserService extends GetxService {
           created_at: DateTime.now(),
           role: "student")
       .obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onClose() {}
 
   void setCurrentUser(User user) {
     currentUser.value = user;

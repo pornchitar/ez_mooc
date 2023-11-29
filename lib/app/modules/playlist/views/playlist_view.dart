@@ -1,10 +1,9 @@
-import 'dart:ffi';
-
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/services/enrollment_service.dart';
+import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
 import 'package:get/get.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../controllers/playlist_controller.dart';
 import 'package:ez_mooc/services/subject_service.dart';
@@ -63,11 +62,9 @@ class _PlaylistViewState extends State<PlaylistView> {
           Expanded(
             // Add an Expanded widget
             child: FutureBuilder(
-              key: Key(Get.find<SubjectService>()
-                  .getCurrentPlaylist()
-                  .subjectId
-                  .toString()),
-              future: fetchAllVideoData(subjectService.vdoPlaylists),
+              key: Key(Get.find<EnrollmentService>().getCurrentVdo()),
+              future:
+                  fetchAllVideoData(Get.find<VdoDetailService>().vdoPlaylists),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -90,9 +87,9 @@ class _PlaylistViewState extends State<PlaylistView> {
                         title: Text(video.title),
                         subtitle: Text(video.author),
                         onTap: () {
-                          Get.find<SubjectService>().setCurrentVdo(video.url);
-                          Get.find<SubjectService>().indexVdo.value = index;
-                          Get.toNamed('/vdo-page', arguments: video.id.value);
+                          // Get.find<VdoDetailService>().currentVdoUrl =
+                          //     video.url.obs;
+                          // Get.toNamed('/vdo-page', arguments: video.id.value);
                         },
                       );
                     },

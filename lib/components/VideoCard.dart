@@ -40,6 +40,7 @@ class VideoCard extends StatelessWidget {
     String namePlaylist,
     String authorPlaylist,
   ) {
+    print(namePlaylist);
     return Container(
       margin: EdgeInsets.all(8.0),
       child: Column(
@@ -109,17 +110,21 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     print('First video: ${firstVideo.url}');
 
     var vdoDetail = VdoDetail(
-        videoId: int.parse(playlistId.value),
-        subjectId: 1,
-        videoTitle: playlist.title,
-        videoUrl: firstVideo.url.toString(),
-        channelName: playlist.author,
-        thumbnail: firstVideo.thumbnails.highResUrl);
+      id:1,
+      videoId: playlistId.value, // Use the YouTube video ID as a string
+      subjectId: 1,
+      videoTitle: playlist.title,
+      videoUrl: firstVideo.url.toString(),
+      channelName: playlist.author,
+      thumbnail: firstVideo.thumbnails.highResUrl,
+    );
+
     return vdoDetail;
   } catch (e) {
     print('Error: $e');
     return VdoDetail(
-        videoId: -1,
+        id: -1,
+        videoId: "",
         subjectId: -1,
         videoTitle: "",
         videoUrl: "",

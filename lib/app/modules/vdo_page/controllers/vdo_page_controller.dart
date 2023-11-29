@@ -5,6 +5,8 @@ import 'package:ez_mooc/services/subject_service.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import '../../../../services/enrollment_service.dart';
+
 class VdoPageController extends GetxController {
   late YoutubePlayerController youtubePlayerController;
   RxDouble percentageWatched = 0.0.obs;
@@ -18,7 +20,7 @@ class VdoPageController extends GetxController {
 
   void initializeYoutubePlayer() {
     youtubePlayerController = YoutubePlayerController(
-      initialVideoId: Get.find<SubjectService>().getCurrentVdo(),
+      initialVideoId: Get.find<EnrollmentService>().getCurrentVdo(),
       flags: const YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
@@ -59,17 +61,17 @@ class VdoPageController extends GetxController {
 
   // void savePercentageWatched(double percentage) {
   //   // Save the percentage watched to your data structure
-  //   Get.find<SubjectService>()
-  //       .enrollments[Get.find<SubjectService>().currentVdoId.value]
+  //   Get.find<EnrollmentService>()
+  //       .enrollments[Get.find<EnrollmentService>().currentVdoId.value]
   //       .report
-  //       .values[Get.find<SubjectService>().indexVdo.value] = percentage;
+  //       .values[Get.find<EnrollmentService>().indexVdo.value] = percentage;
 
   // }
   void savePercentageWatched(double percentage) {
-    int currentVideoId = Get.find<SubjectService>().currentVdoId.value;
-    int indexVideo = Get.find<SubjectService>().indexVdo.value;
+    int currentVideoId = Get.find<EnrollmentService>().currentVdoId.value;
+    int indexVideo = Get.find<EnrollmentService>().indexVdo.value;
 
-    List<Enrollment> enrollments = Get.find<SubjectService>().enrollments;
+    List<Enrollment> enrollments = Get.find<EnrollmentService>().enrollments;
 
     Enrollment currentEnrollment = enrollments.firstWhere(
       (enrollment) => enrollment.subjectId == currentVideoId,
@@ -84,7 +86,7 @@ class VdoPageController extends GetxController {
     progress.progressPercentage = percentage;
     currentEnrollment.progress[indexVideo] = progress;
     enrollments[currentVideoId] = currentEnrollment;
-    Get.find<SubjectService>().setEnrollments(enrollments);
+    Get.find<EnrollmentService>().setEnrollments(enrollments);
   }
 
   @override
