@@ -3,12 +3,16 @@ import 'dart:ffi';
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
 import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
+import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
 
 class SubjectService extends GetxService {
-  Rx<Subject> currentPlaylist = Subject().obs;
-  RxList<EnrollMent> enrollments = <EnrollMent>[].obs;
+  Rx<Subject> currentPlaylist =
+      Subject(subjectId: 1, subjectName: "", description: "", playlistLink: "")
+          .obs;
+
+  RxList<Enrollment> enrollments = <Enrollment>[].obs;
   Rx<String> currentVDO = "".obs;
   RxInt currentVdoId = 1.obs;
 
@@ -39,25 +43,21 @@ class SubjectService extends GetxService {
   void addEnrollment(Subject playlist) {
     currentVdoId.value = 1;
     // Check if the subject is already enrolled
-    bool isEnrolled =
-        enrollments.any((enrollment) => enrollment.subject.id == playlist.id);
+    bool isEnrolled = enrollments
+        .any((enrollment) => enrollment.subjectId == playlist.subjectId);
 
     if (!isEnrolled) {
-      enrollments.add(EnrollMent(
-          id: lastIdReport.value,
-          subject: playlist,
-          user: Get.find<UserService>().getCurrentUser(),
-          isCompleted: false,
-          report: Report(
-            id: lastIdReport.value,
-            values: List<double>.filled(playlist.vdos?.length ?? 0, 0),
-          )));
+      enrollments.add(Enrollment(
+          enrollmentId: lastIdReport.value,
+          userId: Get.find<UserService>().getCurrentUser().user_id,
+          subjectId: playlist.subjectId,
+          enrollmentDate: DateTime.now()));
       currentVdoId.value = lastIdReport.value;
       lastIdReport.value++;
       print('Enrollment added successfully.');
     } else {
-      currentVdoId.value = enrollments
-          .indexWhere((enrollment) => enrollment.subject.id == playlist.id);
+      currentVdoId.value = enrollments.indexWhere(
+          (enrollment) => enrollment.subjectId == playlist.subjectId);
       print('Subject is already enrolled.');
     }
 

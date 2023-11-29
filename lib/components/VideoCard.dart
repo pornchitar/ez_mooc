@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class VideoCard extends StatelessWidget {
@@ -9,7 +12,7 @@ class VideoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<VideoDetails>(
+    return FutureBuilder<VdoDetail>(
       future: extractPlaylistInfo(videoUrl),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -21,10 +24,10 @@ class VideoCard extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error loading video details');
         } else if (snapshot.hasData) {
-          VideoDetails videoDetails = snapshot.data!;
+          VdoDetail vdoDetail = snapshot.data!;
 
           return _buildVideoCard(
-              videoDetails, snapshot.data!.title, snapshot.data!.channelName);
+              vdoDetail, snapshot.data!.videoTitle, snapshot.data!.channelName);
         } else {
           return Text('Unknown error occurred');
         }
@@ -33,7 +36,7 @@ class VideoCard extends StatelessWidget {
   }
 
   Widget _buildVideoCard(
-    VideoDetails videoDetails,
+    VdoDetail vdoDetail,
     String namePlaylist,
     String authorPlaylist,
   ) {
@@ -45,7 +48,7 @@ class VideoCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: Image.network(
-              videoDetails.thumpNail,
+              vdoDetail.thumbnail ?? '',
               height: 200.0,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -95,7 +98,7 @@ class VideoCard extends StatelessWidget {
   }
 }
 
-Future<VideoDetails> extractPlaylistInfo(String playlistUrl) async {
+Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
   var ytClient = YoutubeExplode();
 
   try {
@@ -104,19 +107,24 @@ Future<VideoDetails> extractPlaylistInfo(String playlistUrl) async {
 
     var firstVideo = await ytClient.playlists.getVideos(playlistId).first;
     print('First video: ${firstVideo.url}');
-    var videoDetails = VideoDetails(
-        title: playlist.title,
+
+    var vdoDetail = VdoDetail(
+        videoId: int.parse(playlistId.value),
+        subjectId: 1,
+        videoTitle: playlist.title,
+        videoUrl: firstVideo.url.toString(),
         channelName: playlist.author,
-        views: "",
-        thumpNail: firstVideo.thumbnails.highResUrl);
-    return videoDetails;
+        thumbnail: firstVideo.thumbnails.highResUrl);
+    return vdoDetail;
   } catch (e) {
     print('Error: $e');
-    return VideoDetails(
-        title: "Error",
-        channelName: "Error",
-        views: "Error",
-        thumpNail: "Error");
+    return VdoDetail(
+        videoId: -1,
+        subjectId: -1,
+        videoTitle: "",
+        videoUrl: "",
+        channelName: "",
+        thumbnail: "");
   } finally {
     ytClient.close();
   }

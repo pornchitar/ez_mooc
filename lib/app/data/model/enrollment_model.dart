@@ -1,31 +1,31 @@
 class Enrollment {
-  int user_id;
-  int sub_id;
-  double enroll_progress_list; // Change this to a single double
-  String status;
+  int enrollmentId;
+  int userId;
+  int subjectId;
+  DateTime enrollmentDate;
 
   Enrollment({
-    required this.user_id,
-    required this.sub_id,
-    required this.enroll_progress_list,
-    required this.status,
+    required this.enrollmentId,
+    required this.userId,
+    required this.subjectId,
+    required this.enrollmentDate,
   });
 
   factory Enrollment.fromJson(Map<String, dynamic> json) {
     return Enrollment(
-      user_id: json['user_id'],
-      sub_id: json['sub_id'],
-      enroll_progress_list: json['enroll_progress_list'], // Change this line
-      status: json['status'],
+      enrollmentId: json['enrollment_id'],
+      userId: json['user_id'],
+      subjectId: json['subject_id'],
+      enrollmentDate: DateTime.parse(json['enrollment_date']),
     );
   }
-
+  // to json
   Map<String, dynamic> toJson() {
     return {
-      'user_id': user_id,
-      'sub_id': sub_id,
-      'enroll_progress_list': enroll_progress_list,
-      'status': status,
+      'enrollment_id': enrollmentId,
+      'user_id': userId,
+      'subject_id': subjectId,
+      'enrollment_date': enrollmentDate.toIso8601String(),
     };
   }
 }

@@ -1,39 +1,32 @@
-import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
-
 class Subject {
-  final int sub_id;
-  final String sub_name;
-  final int category_id;
-  final int user_id;
-  final String Youtube_playlist_id;
-  final List<Video> video;
+  int subjectId;
+  String subjectName;
+  String description;
+  String playlistLink;
 
-  Subject(
-      {required this.sub_id,
-      required this.sub_name,
-      required this.category_id,
-      required this.user_id,
-      required this.Youtube_playlist_id,
-      required this.video});
+  Subject({
+    required this.subjectId,
+    required this.subjectName,
+    required this.description,
+    required this.playlistLink,
+  });
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
-      sub_id: json['sub_id'],
-      sub_name: json['sub_name'],
-      category_id: json['category_id'],
-      user_id: json['user_id'],
-      Youtube_playlist_id: json['Youtube_playlist_id'],
-      video: json['video'],
+      subjectId: json['subject_id'],
+      subjectName: json['subject_name'],
+      description: json['description'],
+      playlistLink: json['playlist_link'],
     );
   }
 
+  // to Json,
   Map<String, dynamic> toJson() {
     return {
-      'sub_id': sub_id,
-      'sub_name': sub_name,
-      'category_id': category_id,
-      'user_id': user_id,
-      'Youtube_playlist_id': Youtube_playlist_id
+      'subject_id': subjectId,
+      'subject_name': subjectName,
+      'description': description,
+      'playlist_link': playlistLink,
     };
   }
 }

@@ -1,43 +1,41 @@
-class Video {
-  int video_id;
-  String video_title;
-  String video_description;
-  String video_thumbnail;
-  int sub_id;
-  String video_url;
-  DateTime video_date;
+class VdoDetail {
+  int videoId;
+  int subjectId;
+  String videoTitle;
+  String videoUrl;
+  String channelName;
+  String thumbnail;
 
-  Video({
-    required this.video_id,
-    required this.video_title,
-    required this.video_description,
-    required this.video_thumbnail,
-    required this.sub_id,
-    required this.video_url,
-    required this.video_date,
+  VdoDetail({
+    required this.videoId,
+    required this.subjectId,
+    required this.videoTitle,
+    required this.videoUrl,
+    required this.channelName,
+    required this.thumbnail,
   });
 
-  factory Video.fromJson(Map<String, dynamic> json) {
-    return Video(
-      video_id: json['video_id'],
-      video_title: json['video_title'],
-      video_description: json['video_description'],
-      video_thumbnail: json['video_thumbnail'],
-      sub_id: json['sub_id'],
-      video_url: json['video_url'],
-      video_date: DateTime.parse(json['video_date']),
+  //frrom json
+  factory VdoDetail.fromJson(Map<String, dynamic> json) {
+    return VdoDetail(
+      videoId: json['video_id'],
+      subjectId: json['subject_id'],
+      videoTitle: json['video_title'],
+      videoUrl: json['video_url'],
+      channelName: json['channelName'],
+      thumbnail: json['thumbnail'],
     );
   }
 
+  // to  json
   Map<String, dynamic> toJson() {
     return {
-      'video_id': video_id,
-      'video_title': video_title,
-      'video_description': video_description,
-      'video_thumbnail': video_thumbnail,
-      'sub_id': sub_id,
-      'video_url': video_url,
-      'video_date': video_date.toIso8601String(),
+      'video_id': videoId,
+      'subject_id': subjectId,
+      'video_title': videoTitle,
+      'video_url': videoUrl,
+      'channelName': channelName,
+      'thumbnail': thumbnail,
     };
   }
 }
