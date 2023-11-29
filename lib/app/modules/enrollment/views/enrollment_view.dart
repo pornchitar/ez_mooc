@@ -25,7 +25,7 @@ class EnrollmentView extends GetView {
               itemCount: Get.find<SubjectService>().enrollments.length,
               itemBuilder: (context, index) {
                 var enrollment = Get.find<SubjectService>().enrollments[index];
-                var subject = enrollment.subject;
+                var subject = enrollment.subjectId;
 
                 return Column(
                   children: [

@@ -69,7 +69,7 @@ class HomeView extends GetView<HomeController> {
                 return GestureDetector(
                   child: Obx(
                     () => VideoCard(
-                      videoUrl: controller.playlists[index].url.toString(),
+                      videoUrl: controller.playlists[index].playlistLink,
                     ),
                   ),
                   onTap: () {
@@ -79,8 +79,9 @@ class HomeView extends GetView<HomeController> {
                         .setCurrentPlaylist(controller.playlists[index]);
                     Get.find<SubjectService>()
                         .addEnrollment(controller.playlists[index]);
-                    Get.find<SubjectService>().setCurrentVdo(
-                        controller.playlists[index].vdos![0].toString());
+                    Get.find<SubjectService>().setCurrentVdo(controller
+                        .playlists[index].playlistLink![0]
+                        .toString());
                   },
                 );
               },
