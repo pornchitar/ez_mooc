@@ -1,4 +1,4 @@
-class Progress {
+class ProgressEnrollment {
   int progressId;
   int userId;
   int videoId;
@@ -6,7 +6,7 @@ class Progress {
   double progressPercentage;
   DateTime lastViewedTimestamp;
 
-  Progress({
+  ProgressEnrollment({
     required this.progressId,
     required this.userId,
     required this.videoId,
@@ -15,8 +15,8 @@ class Progress {
     required this.lastViewedTimestamp,
   });
 
-  factory Progress.fromJson(Map<String, dynamic> json) {
-    return Progress(
+  factory ProgressEnrollment.fromJson(Map<String, dynamic> json) {
+    return ProgressEnrollment(
       progressId: json['progress_id'],
       userId: json['user_id'],
       videoId: json['video_id'],

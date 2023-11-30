@@ -82,6 +82,7 @@ class HomeView extends GetView<HomeController> {
                         .vdoDetail) {
                       print(element.videoUrl);
                     }
+
                     Get.find<VdoDetailService>().setVdoPlaylists(
                       Get.find<SubjectService>()
                           .playlists[index]
@@ -90,15 +91,21 @@ class HomeView extends GetView<HomeController> {
                     );
                     Get.find<VdoDetailService>().currentSubject.value =
                         Get.find<SubjectService>().playlists[index];
+
                     Get.find<VdoDetailService>().setCurrentVdo(
                         Get.find<VdoDetailService>()
                             .currentSubject
                             .value
-                            .vdoDetail
-                            .toList()[0]);
+                            .vdoDetail[0]);
+
                     Get.find<EnrollmentService>().addEnrollment(
                         Get.find<SubjectService>().playlists[index]);
 
+                    Get.find<EnrollmentService>().setCurrentVdoId(
+                        Get.find<SubjectService>()
+                            .playlists[index]
+                            .vdoDetail[0]
+                            .id);
                     Get.toNamed('/playlist');
                   },
                 );

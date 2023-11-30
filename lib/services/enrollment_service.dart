@@ -1,4 +1,5 @@
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
+import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,13 @@ class EnrollmentService extends GetxService {
   //set enrollments
   void setEnrollments(List<Enrollment> enrollments) {
     this.enrollments.value = enrollments;
+  }
+
+  //get currentVdoId
+  int get getCurrentVdoId => currentVdoId.value;
+  //set currentVdoId
+  void setCurrentVdoId(int id) {
+    currentVdoId.value = id;
   }
 
   void changeSelectedItem(int index) {
@@ -45,11 +53,23 @@ class EnrollmentService extends GetxService {
 
     if (!isEnrolled) {
       enrollments.add(Enrollment(
-          enrollmentId: lastIdReport.value,
-          userId: Get.find<UserService>().getCurrentUser().user_id,
-          subjectId: playlist.subjectId,
-          enrollmentDate: DateTime.now(),
-          progress: []));
+        enrollmentId: lastIdReport.value,
+        userId: Get.find<UserService>().getCurrentUser().user_id,
+        subjectId: playlist.subjectId,
+        enrollmentDate: DateTime.now(),
+        progress: List.generate(
+          playlist.vdoDetail.length,
+          (index) => ProgressEnrollment(
+            progressId: index,
+            userId: Get.find<UserService>().currentUser.value.user_id,
+            videoId: playlist.vdoDetail[index].id,
+            enrollmentId: lastIdReport.value,
+            progressPercentage: 0,
+            lastViewedTimestamp: DateTime.now(),
+          ),
+        ),
+      ));
+
       currentVdoId.value = lastIdReport.value;
       lastIdReport.value++;
       print('Enrollment added successfully.');
@@ -59,7 +79,11 @@ class EnrollmentService extends GetxService {
       print('Subject is already enrolled.');
     }
     print("-------------------");
-    print(enrollments.length);
+    for (var element in enrollments) {
+      for (var element_ in element.progress) {
+        print(element_.progressPercentage);
+      }
+    }
     print("-------------------");
   }
 

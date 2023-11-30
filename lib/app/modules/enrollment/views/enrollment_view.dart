@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
+import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:get/get.dart';
@@ -27,7 +28,9 @@ class EnrollmentView extends GetView {
               itemBuilder: (context, index) {
                 var enrollment =
                     Get.find<EnrollmentService>().enrollments[index];
-                var subject = Get.find<SubjectService>().currentPlaylist.value;
+                //subject ที่เรา enroll ไป
+                var subject = Get.find<SubjectService>().playlists.firstWhere(
+                    (element) => element.subjectId == enrollment.subjectId);
 
                 return Column(
                   children: [
@@ -40,25 +43,22 @@ class EnrollmentView extends GetView {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: enrollment.progress.length,
-                          itemBuilder: (context, index) {
-                            var vdo = enrollment.progress.elementAt(index);
-                            var percentage = enrollment.progress
-                                .elementAt(index)
-                                .progressPercentage;
+                          itemCount: subject.vdoDetail.length,
+                          itemBuilder: (context, index_) {
+                            var vdo = subject.vdoDetail[index_];
+
                             return ListTile(
-                              title: Text(subject.subjectName.toString()),
+                              title: Text(vdo.videoTitle),
                               subtitle: Text(subject.description.toString()),
                               leading: CircularPercentIndicator(
                                 radius: 15.0,
                                 lineWidth: 5.0,
-                                percent: enrollment.progress
-                                        .elementAt(index)
-                                        .progressPercentage /
+                                percent: enrollment
+                                        .progress[index_].progressPercentage /
                                     100,
                                 center:
                                     enrollment.progress.elementAt(index) == 100
-                                        ? Text(
+                                        ? const Text(
                                             "100%",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class EnrollmentView extends GetView {
                                           )
                                         : Text(
                                             "${enrollment.progress.elementAt(index).progressPercentage.toStringAsPrecision(2)}%",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 8.0,
                                             ),
@@ -89,11 +89,14 @@ class EnrollmentView extends GetView {
                         child: FAProgressBar(
                           maxValue: 100,
                           borderRadius: BorderRadius.circular(40),
-                          currentValue: enrollment.progress
-                                  .map(
-                                      (progress) => progress.progressPercentage)
-                                  .reduce((value, element) => value + element) /
-                              enrollment.progress.length,
+                          currentValue: enrollment.progress.isEmpty
+                              ? 0.0 // Default value when the list is empty
+                              : enrollment.progress
+                                      .map((progress) =>
+                                          progress.progressPercentage)
+                                      .reduce(
+                                          (value, element) => value + element) /
+                                  enrollment.progress.length,
                           displayText: '%',
                           progressGradient: LinearGradient(
                             colors: [

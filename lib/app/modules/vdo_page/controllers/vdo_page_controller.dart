@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
+import 'package:ez_mooc/app/data/model/report_model.dart';
+import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:get/get.dart';
@@ -64,34 +66,50 @@ class VdoPageController extends GetxController {
         100;
   }
 
-  // void savePercentageWatched(double percentage) {
-  //   // Save the percentage watched to your data structure
-  //   Get.find<EnrollmentService>()
-  //       .enrollments[Get.find<EnrollmentService>().currentVdoId.value]
-  //       .report
-  //       .values[Get.find<EnrollmentService>().indexVdo.value] = percentage;
-
-  // }
   void savePercentageWatched(double percentage) {
-    int currentVideoId = Get.find<EnrollmentService>().currentVdoId.value;
-    int indexVideo = Get.find<EnrollmentService>().indexVdo.value;
+    int currentVideoId = Get.find<EnrollmentService>().getCurrentVdoId;
+    Subject currentSub = Get.find<VdoDetailService>().currentSubject.value;
+    print(currentSub.toJson());
+    print(currentVideoId);
+    Enrollment currentEnrollment = Get.find<EnrollmentService>()
+        .enrollments
+        .firstWhere(
+            (enrollment) => enrollment.subjectId == currentSub.subjectId,
+            orElse: () => throw Exception(
+                "-------------------Enrollment not found for video ID: $currentVideoId -------------"));
+    print(currentEnrollment.toJson());
+    for (var element in currentEnrollment.progress) {
+      print(element.toJson());
+      if (element.videoId == currentVideoId) {
+        element.progressPercentage = percentage;
+        element.lastViewedTimestamp = DateTime.now();
 
-    List<Enrollment> enrollments = Get.find<EnrollmentService>().enrollments;
+        Get.find<EnrollmentService>()
+            .enrollments
+            .firstWhere(
+                (enrollment) => enrollment.subjectId == currentSub.subjectId)
+            .progress[currentVideoId] = element;
 
-    Enrollment currentEnrollment = enrollments.firstWhere(
-      (enrollment) => enrollment.subjectId == currentVideoId,
-      orElse: () =>
-          throw Exception("Enrollment not found for video ID: $currentVideoId"),
-    );
+        print("====================================");
+        print(Get.find<EnrollmentService>()
+            .enrollments
+            .firstWhere(
+                (enrollment) => enrollment.subjectId == currentSub.subjectId)
+            .toJson());
+        print("====================================");
 
-    var progress = currentEnrollment.progress.firstWhere(
-        (element) => element.videoId == indexVideo,
-        orElse: () =>
-            throw Exception("Progress not found for video ID: $indexVideo"));
-    progress.progressPercentage = percentage;
-    currentEnrollment.progress[indexVideo] = progress;
-    enrollments[currentVideoId] = currentEnrollment;
-    Get.find<EnrollmentService>().setEnrollments(enrollments);
+        break;
+      }
+    }
+
+    // var progress = currentEnrollment.progress.firstWhere(
+    //     (element) => element.videoId == indexVideo,
+    //     orElse: () =>
+    //         throw Exception("Progress not found for video ID: $indexVideo"));
+    // progress.progressPercentage = percentage;
+    // currentEnrollment.progress[indexVideo] = progress;
+    // enrollments[currentVideoId] = currentEnrollment;
+    // Get.find<EnrollmentService>().setEnrollments(enrollments);
   }
 
   @override

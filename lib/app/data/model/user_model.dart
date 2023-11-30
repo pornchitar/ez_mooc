@@ -3,7 +3,6 @@ class User {
   String user_name;
   String user_password;
   String image;
-  String user_phone;
   DateTime created_at;
   String role;
 
@@ -12,7 +11,6 @@ class User {
     required this.user_name,
     required this.user_password,
     required this.image,
-    required this.user_phone,
     required this.created_at,
     required this.role,
   });
@@ -23,7 +21,6 @@ class User {
       user_name: json['user_name'],
       user_password: json['user_password'],
       image: json['image'],
-      user_phone: json['user_phone'],
       created_at: DateTime.parse(json['created_at']),
       role: json['role'],
     );
@@ -35,7 +32,6 @@ class User {
       'user_name': user_name,
       'user_password': user_password,
       'image': image,
-      'user_phone': user_phone,
       'created_at': created_at.toIso8601String(),
       'role': role,
     };

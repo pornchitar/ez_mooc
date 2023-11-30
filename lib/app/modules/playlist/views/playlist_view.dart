@@ -53,6 +53,7 @@ class _PlaylistViewState extends State<PlaylistView> {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       appBar: AppBar(
         title: Obx(
@@ -94,6 +95,14 @@ class _PlaylistViewState extends State<PlaylistView> {
                         title: Text(video.title),
                         subtitle: Text(video.author),
                         onTap: () {
+                          Get.find<EnrollmentService>().currentVdoId.value =
+                              Get.find<VdoDetailService>()
+                                  .currentSubject
+                                  .value
+                                  .vdoDetail[index]
+                                  .id;
+                          print(
+                              "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
                           Get.find<VdoDetailService>().setCurrentVdo(
                               Get.find<VdoDetailService>()
                                   .currentSubject
@@ -107,6 +116,9 @@ class _PlaylistViewState extends State<PlaylistView> {
                                   .vdoDetail
                                   .toList()[index]
                                   .videoId);
+
+                          print(
+                              "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
                         },
                       );
                     },

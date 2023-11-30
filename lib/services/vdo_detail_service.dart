@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class VdoDetailService extends GetxService {
   RxList<VdoDetail> vdoPlaylists = RxList<VdoDetail>.of([]).obs();
+
   Rx<Subject> currentSubject = Subject(
     subjectId: 1,
     subjectName: "",

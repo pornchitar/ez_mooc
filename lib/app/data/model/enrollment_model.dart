@@ -5,7 +5,7 @@ class Enrollment {
   int userId;
   int subjectId;
   DateTime enrollmentDate;
-  List<Progress> progress;
+  List<ProgressEnrollment> progress;
 
   Enrollment({
     required this.enrollmentId,
@@ -21,8 +21,8 @@ class Enrollment {
       userId: json['user_id'],
       subjectId: json['subject_id'],
       enrollmentDate: DateTime.parse(json['enrollment_date']),
-      progress: List<Progress>.from(
-          json['progress'].map((progress) => Progress.fromJson(progress))),
+      progress: List<ProgressEnrollment>.from(json['progress']
+          .map((progress) => ProgressEnrollment.fromJson(progress))),
     );
   }
 
