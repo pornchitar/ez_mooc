@@ -1,5 +1,6 @@
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/components/VideoCard.dart';
+import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,9 @@ class HomeView extends GetView<HomeController> {
                             .value
                             .vdoDetail
                             .toList()[0]);
+                    Get.find<EnrollmentService>().addEnrollment(
+                        Get.find<SubjectService>().playlists[index]);
+
                     Get.toNamed('/playlist');
                   },
                 );

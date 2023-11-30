@@ -58,8 +58,9 @@ class EnrollmentService extends GetxService {
           (enrollment) => enrollment.subjectId == playlist.subjectId);
       print('Subject is already enrolled.');
     }
-
+    print("-------------------");
     print(enrollments.length);
+    print("-------------------");
   }
 
   void removeEnrollment(Subject playlist) {

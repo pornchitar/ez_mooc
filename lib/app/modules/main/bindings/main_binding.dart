@@ -4,6 +4,7 @@ import 'package:ez_mooc/app/modules/home/controllers/home_controller.dart';
 import 'package:ez_mooc/app/modules/likeVdo/controllers/like_vdo_controller.dart';
 import 'package:ez_mooc/app/modules/playlist/controllers/playlist_controller.dart';
 import 'package:ez_mooc/app/modules/profile/controllers/profile_controller.dart';
+import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
@@ -26,5 +27,6 @@ class MainBinding extends Bindings {
     Get.put(SubjectService());
     Get.put(UserService());
     Get.put(VdoDetailService());
+    Get.put(EnrollmentService());
   }
 }

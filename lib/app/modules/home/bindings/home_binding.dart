@@ -1,3 +1,4 @@
+import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/home_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/user_service.dart';
@@ -17,5 +18,6 @@ class HomeBinding extends Bindings {
 
     Get.put(NavigationController());
     Get.put(VdoDetailService());
+    Get.put(EnrollmentService());
   }
 }

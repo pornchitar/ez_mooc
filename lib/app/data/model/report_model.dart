@@ -2,6 +2,7 @@ class Progress {
   int progressId;
   int userId;
   int videoId;
+  int enrollmentId;
   double progressPercentage;
   DateTime lastViewedTimestamp;
 
@@ -9,6 +10,7 @@ class Progress {
     required this.progressId,
     required this.userId,
     required this.videoId,
+    required this.enrollmentId,
     required this.progressPercentage,
     required this.lastViewedTimestamp,
   });
@@ -18,6 +20,7 @@ class Progress {
       progressId: json['progress_id'],
       userId: json['user_id'],
       videoId: json['video_id'],
+      enrollmentId: json['enrollment_id'],
       progressPercentage: json['progress_percentage'],
       lastViewedTimestamp: DateTime.parse(json['last_viewed_timestamp']),
     );
@@ -29,6 +32,7 @@ class Progress {
       'progress_id': progressId,
       'user_id': userId,
       'video_id': videoId,
+      'enrollment_id': enrollmentId,
       'progress_percentage': progressPercentage,
       'last_viewed_timestamp': lastViewedTimestamp.toIso8601String(),
     };
