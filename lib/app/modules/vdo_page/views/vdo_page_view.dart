@@ -9,22 +9,14 @@ class VdoPageView extends GetView<VdoPageController> {
   const VdoPageView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('VdoPageView'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: GetBuilder<VdoPageController>(
-          init: VdoPageController(),
-          builder: (controller) {
-            return YoutubePlayer(
-              controller: controller.youtubePlayerController,
-              showVideoProgressIndicator: true,
-            );
-          },
-        ),
-      ),
+    return GetBuilder<VdoPageController>(
+      init: VdoPageController(),
+      builder: (controller) {
+        return YoutubePlayer(
+          controller: controller.youtubePlayerController,
+          showVideoProgressIndicator: true,
+        );
+      },
     );
   }
 }

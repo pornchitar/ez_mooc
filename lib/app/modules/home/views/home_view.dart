@@ -74,11 +74,29 @@ class HomeView extends GetView<HomeController> {
                           .playlists[index]
                           .playlistLink,
                     ),
-                    // () => Container(
-                    //   child: Text("header"),
-                    // ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    for (var element in Get.find<SubjectService>()
+                        .playlists[index]
+                        .vdoDetail) {
+                      print(element.videoUrl);
+                    }
+                    Get.find<VdoDetailService>().setVdoPlaylists(
+                      Get.find<SubjectService>()
+                          .playlists[index]
+                          .vdoDetail
+                          .toList(),
+                    );
+                    Get.find<VdoDetailService>().currentSubject.value =
+                        Get.find<SubjectService>().playlists[index];
+                    Get.find<VdoDetailService>().setCurrentVdo(
+                        Get.find<VdoDetailService>()
+                            .currentSubject
+                            .value
+                            .vdoDetail
+                            .toList()[0]);
+                    Get.toNamed('/playlist');
+                  },
                 );
               },
             ),

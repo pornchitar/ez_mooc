@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -107,11 +108,10 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     var playlist = await ytClient.playlists.get(playlistId);
 
     var firstVideo = await ytClient.playlists.getVideos(playlistId).first;
-    print('First video: ${firstVideo.url}');
 
     var vdoDetail = VdoDetail(
-      id:1,
-      videoId: playlistId.value, // Use the YouTube video ID as a string
+      id: 1,
+      videoId: playlistId.value,
       subjectId: 1,
       videoTitle: playlist.title,
       videoUrl: firstVideo.url.toString(),

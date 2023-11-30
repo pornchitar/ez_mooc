@@ -1,4 +1,6 @@
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/app/modules/vdo_page/controllers/vdo_page_controller.dart';
+import 'package:ez_mooc/app/modules/vdo_page/views/vdo_page_view.dart';
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +39,8 @@ class _PlaylistViewState extends State<PlaylistView> {
 
         var match = regExp.firstMatch(vdourl.videoUrl);
         if (match != null && match.groupCount >= 1) {
-          var vdourl = match.group(1);
-          var video = await ytClient.videos.get(yt.VideoId(vdourl.toString()));
+          var vdourl_ = match.group(1);
+          var video = await ytClient.videos.get(yt.VideoId(vdourl_.toString()));
           videos.add(video);
         }
       }
@@ -59,12 +61,17 @@ class _PlaylistViewState extends State<PlaylistView> {
       ),
       body: Column(
         children: [
+          VdoPageView(),
+          SizedBox(height: 10.0),
           Expanded(
             // Add an Expanded widget
             child: FutureBuilder(
               key: Key(Get.find<EnrollmentService>().getCurrentVdo()),
-              future:
-                  fetchAllVideoData(Get.find<VdoDetailService>().vdoPlaylists),
+              future: fetchAllVideoData(Get.find<VdoDetailService>()
+                  .currentSubject
+                  .value
+                  .vdoDetail
+                  .toList()),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -87,9 +94,19 @@ class _PlaylistViewState extends State<PlaylistView> {
                         title: Text(video.title),
                         subtitle: Text(video.author),
                         onTap: () {
-                          // Get.find<VdoDetailService>().currentVdoUrl =
-                          //     video.url.obs;
-                          // Get.toNamed('/vdo-page', arguments: video.id.value);
+                          Get.find<VdoDetailService>().setCurrentVdo(
+                              Get.find<VdoDetailService>()
+                                  .currentSubject
+                                  .value
+                                  .vdoDetail
+                                  .toList()[index]);
+                          Get.find<VdoPageController>().loadVideo(
+                              Get.find<VdoDetailService>()
+                                  .currentSubject
+                                  .value
+                                  .vdoDetail
+                                  .toList()[index]
+                                  .videoId);
                         },
                       );
                     },

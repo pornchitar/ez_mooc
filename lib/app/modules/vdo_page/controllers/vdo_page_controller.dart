@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
 import 'package:ez_mooc/services/subject_service.dart';
+import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -18,9 +19,13 @@ class VdoPageController extends GetxController {
     initializeYoutubePlayer();
   }
 
+  void loadVideo(String videoId) {
+    youtubePlayerController.load(videoId);
+  }
+
   void initializeYoutubePlayer() {
     youtubePlayerController = YoutubePlayerController(
-      initialVideoId: Get.find<EnrollmentService>().getCurrentVdo(),
+      initialVideoId: Get.find<VdoDetailService>().getCurrentVdo().videoId,
       flags: const YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
