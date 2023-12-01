@@ -83,7 +83,7 @@ class VdoPageController extends GetxController {
 
   void managePeriodicUpdate() {
     saveTimer?.cancel(); // Cancel previous timer
-    saveTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+    saveTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       double percentage = calculatePercentageWatched(youtubePlayerController);
       savePercentageWatched(percentage);
     });
@@ -146,25 +146,19 @@ class VdoPageController extends GetxController {
 
     for (var element in currentEnrollment.progress) {
       if (element.videoId == currentVideoId) {
-        print("found video");
         var videoProgress = currentEnrollment.progress
             .firstWhere((element) => element.videoId == currentVideoId);
         videoProgress.progressPercentage = percentage;
         videoProgress.lastViewedTimestamp = DateTime.now();
-        print("====================================");
-        print(
-          enrollmentService.enrollments
-              .firstWhere(
-                  (enrollment) => enrollment.subjectId == currentSub.subjectId)
-              .progress
-              .firstWhere((element) => element.videoId == currentVideoId)
-              .toJson(),
-        );
-        print("====================================");
-
         break;
       }
     }
+
+    // Update the enrollment progress list
+    enrollmentService.enrollments
+        .firstWhere(
+            (enrollment) => enrollment.subjectId == currentSub.subjectId)
+        .progress = List.from(currentEnrollment.progress);
   }
 
   String extractYouTubeVideoId(String videoUrl) {
@@ -180,5 +174,9 @@ class VdoPageController extends GetxController {
       // Invalid YouTube URL
       throw Exception('Invalid YouTube URL');
     }
+  }
+
+  void updateEnrollmentView() {
+    update(); // This will force the rebuild of the widget
   }
 }

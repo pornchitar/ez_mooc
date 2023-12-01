@@ -49,25 +49,26 @@ class EnrollmentView extends GetView {
                               leading: CircularPercentIndicator(
                                 radius: 15.0,
                                 lineWidth: 5.0,
-                                percent: enrollment
+                                percent: (enrollment
                                         .progress[index_].progressPercentage /
-                                    100,
-                                center:
-                                    enrollment.progress.elementAt(index) == 100
-                                        ? const Text(
-                                            "100%",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 8.0,
-                                            ),
-                                          )
-                                        : Text(
-                                            "${(enrollment.progress[index_].progressPercentage).toStringAsPrecision(2)}%",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 8.0,
-                                            ),
-                                          ),
+                                    100),
+                                center: enrollment.progress[index_]
+                                            .progressPercentage ==
+                                        100.0
+                                    ? const Text(
+                                        "100%",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 8.0,
+                                        ),
+                                      )
+                                    : Text(
+                                        "${(enrollment.progress[index_].progressPercentage).toStringAsPrecision(2)}%",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 8.0,
+                                        ),
+                                      ),
                                 backgroundColor:
                                     Color.fromARGB(255, 254, 236, 236),
                                 progressColor:

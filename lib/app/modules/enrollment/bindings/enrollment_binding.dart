@@ -11,6 +11,6 @@ class EnrollmentBinding extends Bindings {
       () => EnrollmentController(),
     );
     Get.put(HomeController());
-    Get.lazyPut(() => VdoPageController());
+    Get.put(() => VdoPageController());
   }
 }

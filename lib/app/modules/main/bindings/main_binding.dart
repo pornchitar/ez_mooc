@@ -28,7 +28,7 @@ class MainBinding extends Bindings {
     Get.put(SubjectService());
     Get.put(UserService());
     Get.put(VdoDetailService());
-    Get.put(EnrollmentService());
+    Get.lazyPut(() => EnrollmentService());
     Get.lazyPut(() => VdoPageController());
   }
 }
