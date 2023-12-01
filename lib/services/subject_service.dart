@@ -20,7 +20,6 @@ class SubjectService extends GetxService {
           VdoDetail(
             id: 1,
             videoId: "hDEKU33U020",
-            subjectId: 1,
             videoTitle:
                 'ชายผู้เติมไวที่สุด | RLCraft ครัวเหลี่ยมข้าวอร่อย EP.1',
             videoUrl: "https://youtu.be/hDEKU33U020?si=wXMVb1cwt9XAeuJ2",
@@ -30,7 +29,6 @@ class SubjectService extends GetxService {
           VdoDetail(
             id: 2,
             videoId: "FcQvAOyD9i8",
-            subjectId: 1,
             videoTitle: 'บ้านนี้เจ้าที่แรง | RLCraft ครัวเหลี่ยมข้าวอร่อย EP.2',
             videoUrl: "https://youtu.be/FcQvAOyD9i8?si=cvmS35f4tikHhqSf",
             channelName: "Gssspotted",
@@ -47,7 +45,6 @@ class SubjectService extends GetxService {
           VdoDetail(
             id: 3,
             videoId: "0byQ3wvcs58",
-            subjectId: 2,
             videoTitle:
                 '"เฮี้ยน" | คุณแก๊ป | 5 ก.พ. 17 | THE GHOST RADIO | เล่าเรื่องผีเดอะโกส',
             videoUrl: "https://youtu.be/0byQ3wvcs58?si=yFUZLyHABevJ_ROI",
@@ -57,7 +54,6 @@ class SubjectService extends GetxService {
           VdoDetail(
             id: 4,
             videoId: "R7ZCPM-Aufw",
-            subjectId: 2,
             videoTitle:
                 'ห้องสนิม | คุณแป้ง | 6 ม.ค. 61 | ***น่ากลัวมากของปี 2561 THE GHOST RADIO | ฟังเรื่องผีเดอะโกส',
             videoUrl: "https://youtu.be/R7ZCPM-Aufw?si=v4YvPAzLUEseC-cA",

@@ -16,8 +16,8 @@ class HomeBinding extends Bindings {
     Get.put(SubjectService());
     Get.put(UserService());
 
-    Get.put(NavigationController());
-    Get.put(VdoDetailService());
-    Get.put(EnrollmentService());
+    Get.lazyPut(() => NavigationController());
+    Get.lazyPut(() => VdoDetailService());
+    Get.lazyPut(() => EnrollmentService());
   }
 }

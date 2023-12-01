@@ -15,7 +15,6 @@ class VdoDetailService extends GetxService {
   Rx<VdoDetail> currentDetail = VdoDetail(
     id: 1,
     videoId: "",
-    subjectId: 1,
     videoTitle: "",
     videoUrl: "",
     channelName: "",

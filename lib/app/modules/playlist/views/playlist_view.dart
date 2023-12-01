@@ -53,7 +53,6 @@ class _PlaylistViewState extends State<PlaylistView> {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: AppBar(
         title: Obx(

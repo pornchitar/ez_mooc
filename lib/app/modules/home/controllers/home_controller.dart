@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
+import 'package:ez_mooc/app/modules/vdo_page/controllers/vdo_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -35,5 +36,11 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  @override
+  void dispose() {
+    Get.find<VdoPageController>().disposeController();
+    super.dispose();
   }
 }

@@ -112,7 +112,6 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     var vdoDetail = VdoDetail(
       id: 1,
       videoId: playlistId.value,
-      subjectId: 1,
       videoTitle: playlist.title,
       videoUrl: firstVideo.url.toString(),
       channelName: playlist.author,
@@ -125,7 +124,6 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     return VdoDetail(
         id: -1,
         videoId: "",
-        subjectId: -1,
         videoTitle: "",
         videoUrl: "",
         channelName: "",

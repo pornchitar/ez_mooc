@@ -7,16 +7,12 @@ import '../controllers/vdo_page_controller.dart';
 
 class VdoPageView extends GetView<VdoPageController> {
   const VdoPageView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<VdoPageController>(
-      init: VdoPageController(),
-      builder: (controller) {
-        return YoutubePlayer(
+    return Obx(() => YoutubePlayer(
           controller: controller.youtubePlayerController,
           showVideoProgressIndicator: true,
-        );
-      },
-    );
+        ));
   }
 }

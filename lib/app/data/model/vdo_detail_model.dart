@@ -1,7 +1,6 @@
 class VdoDetail {
   int id;
   String videoId;
-  int subjectId;
   String videoTitle;
   String videoUrl;
   String channelName;
@@ -10,7 +9,6 @@ class VdoDetail {
   VdoDetail({
     required this.id,
     required this.videoId,
-    required this.subjectId,
     required this.videoTitle,
     required this.videoUrl,
     required this.channelName,
@@ -21,7 +19,6 @@ class VdoDetail {
     return VdoDetail(
       id: json['id'],
       videoId: json['videoId'],
-      subjectId: json['subjectId'],
       videoTitle: json['videoTitle'],
       videoUrl: json['videoUrl'],
       channelName: json['channelName'],
@@ -32,7 +29,6 @@ class VdoDetail {
   Map<String, dynamic> toJson() => {
         'id': id,
         'videoId': videoId,
-        'subjectId': subjectId,
         'videoTitle': videoTitle,
         'videoUrl': videoUrl,
         'channelName': channelName,

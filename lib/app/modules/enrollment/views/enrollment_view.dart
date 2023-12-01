@@ -2,14 +2,11 @@ import 'dart:ui';
 
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
-import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart' as yt;
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class EnrollmentView extends GetView {
   const EnrollmentView({Key? key}) : super(key: key);
@@ -28,7 +25,6 @@ class EnrollmentView extends GetView {
               itemBuilder: (context, index) {
                 var enrollment =
                     Get.find<EnrollmentService>().enrollments[index];
-                //subject ที่เรา enroll ไป
                 var subject = Get.find<SubjectService>().playlists.firstWhere(
                     (element) => element.subjectId == enrollment.subjectId);
 
@@ -66,7 +62,7 @@ class EnrollmentView extends GetView {
                                             ),
                                           )
                                         : Text(
-                                            "${enrollment.progress.elementAt(index).progressPercentage.toStringAsPrecision(2)}%",
+                                            "${(enrollment.progress[index_].progressPercentage).toStringAsPrecision(2)}%",
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 8.0,
