@@ -20,7 +20,7 @@ class MainView extends GetView<MainController> {
         height: 80.0,
         child: BottomNavigationBar(
           unselectedItemColor: Colors.black54,
-          backgroundColor: Color.fromRGBO(144, 94, 150, 1),
+          backgroundColor: Color(0xff551E68),
           type: BottomNavigationBarType.fixed,
           selectedFontSize: 0.0,
           unselectedFontSize: 0.0,

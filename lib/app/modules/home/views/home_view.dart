@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:ui';
+
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/components/VideoCard.dart';
 import 'package:ez_mooc/services/enrollment_service.dart';
@@ -16,7 +19,7 @@ class HomeView extends GetView<HomeController> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0, // Remove shadow
-        backgroundColor: Color.fromRGBO(144, 94, 150, 1),
+        backgroundColor: Color(0xff551E68),
         leading: Image.asset(
           'images/logo.png', // Replace with your logo asset
           height: 75.0,
@@ -31,98 +34,157 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Category Section
-          Container(
-            height: 120.0,
-            padding: EdgeInsets.all(10.0),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _buildCategoryCard('images/TV.png', 'ศาสนา'),
-                _buildCategoryCard('images/find.png', 'สุขภาพจิต'),
-                _buildCategoryCard('images/home.png', 'ศิลปะ'),
-                _buildCategoryCard('images/heart.png', 'การลงทุน'),
-                _buildCategoryCard('images/TV.png', 'การเมือง'),
-                _buildCategoryCard('images/find.png', 'การเรียน'),
-                _buildCategoryCard('images/home.png', 'การเรียน'),
-                // Add more category cards as needed
-              ],
+      body: Container(
+        color: Color(0xFFEDE4FF),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Category Section
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+              child: Text(
+                'หมวดหมู่',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontFamily: 'Kanit',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: Get.find<SubjectService>().playlists.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  child: Obx(
-                    () => VideoCard(
-                      videoUrl: Get.find<SubjectService>()
-                          .playlists[index]
-                          .playlistLink,
+            Container(
+              height: 180.0,
+              padding: EdgeInsets.all(10.0),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _buildAllCardDetail('images/art_cat.png', 'อาหาร'),
+                  _buildAllCardDetail('images/art_cat.png', 'ธรรมมะ'),
+                  _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
+                  _buildAllCardDetail('images/art_cat.png', 'เทคโนโลยี'),
+                  _buildAllCardDetail('images/art_cat.png', 'พัฒนาจิต'),
+
+                  // Add more category cards as needed
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Text('แนะนำสำหรับคุณ',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    fontFamily: 'Kanit',
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: Get.find<SubjectService>().playlists.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    child: Obx(
+                      () => VideoCard(
+                        videoUrl: Get.find<SubjectService>()
+                            .playlists[index]
+                            .playlistLink,
+                      ),
                     ),
-                  ),
-                  onTap: () {
-                    for (var element in Get.find<SubjectService>()
-                        .playlists[index]
-                        .vdoDetail) {
-                      print(element.videoUrl);
-                    }
-
-                    Get.find<VdoDetailService>().setVdoPlaylists(
-                      Get.find<SubjectService>()
+                    onTap: () {
+                      for (var element in Get.find<SubjectService>()
                           .playlists[index]
-                          .vdoDetail
-                          .toList(),
-                    );
-                    Get.find<VdoDetailService>().currentSubject.value =
-                        Get.find<SubjectService>().playlists[index];
+                          .vdoDetail) {
+                        print(element.videoUrl);
+                      }
 
-                    Get.find<VdoDetailService>().setCurrentVdo(
-                        Get.find<VdoDetailService>()
-                            .currentSubject
-                            .value
-                            .vdoDetail[0]);
-
-                    Get.find<EnrollmentService>().addEnrollment(
-                        Get.find<SubjectService>().playlists[index]);
-
-                    Get.find<EnrollmentService>().setCurrentVdoId(
+                      Get.find<VdoDetailService>().setVdoPlaylists(
                         Get.find<SubjectService>()
                             .playlists[index]
-                            .vdoDetail[0]
-                            .id);
-                    Get.toNamed('/playlist');
-                  },
-                );
-              },
+                            .vdoDetail
+                            .toList(),
+                      );
+                      Get.find<VdoDetailService>().currentSubject.value =
+                          Get.find<SubjectService>().playlists[index];
+
+                      Get.find<VdoDetailService>().setCurrentVdo(
+                          Get.find<VdoDetailService>()
+                              .currentSubject
+                              .value
+                              .vdoDetail[0]);
+
+                      Get.find<EnrollmentService>().addEnrollment(
+                          Get.find<SubjectService>().playlists[index]);
+
+                      Get.find<EnrollmentService>().setCurrentVdoId(
+                          Get.find<SubjectService>()
+                              .playlists[index]
+                              .vdoDetail[0]
+                              .id);
+                      Get.toNamed('/playlist');
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
-Widget _buildCategoryCard(String imagePath, String category) {
-  return Container(
-    width: 120.0, // Adjust the width to make the card square
-    height: 170.0, // Adjust the height to include space for text below
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(20.0),
+Widget _buildAllCardDetail(String imagePath, String nameCat) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      children: [
+        _buildCategoryCard(imagePath),
+        SizedBox(height: 10.0),
+        Text(nameCat,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontFamily: 'Kanit',
+            )),
+      ],
     ),
-    child: Card(
-      color: Color.fromRGBO(144, 94, 150, 1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            imagePath,
-            height: 50.0,
+  );
+}
+
+Widget _buildCategoryCard(String imagePath) {
+  Color backgroundColor = Color(0xFFC3ACD0);
+
+  return Container(
+    width: 100.0, // Adjust the width to make the card square
+    height: 100.0, // Maintain a square shape
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15.0),
+      boxShadow: [
+        BoxShadow(
+          color: backgroundColor.withOpacity(1),
+          spreadRadius: 1,
+          blurRadius: 5,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(15.0),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+        child: Container(
+          width: 100.0,
+          height: 100.0,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: backgroundColor.withOpacity(0.8),
           ),
-          SizedBox(height: 8.0), // Adjust the spacing between image and text
-        ],
+          child: Center(
+            child: Image.asset(
+              imagePath,
+              height: 60.0,
+            ),
+          ),
+        ),
       ),
     ),
   );
