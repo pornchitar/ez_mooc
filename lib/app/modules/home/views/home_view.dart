@@ -11,35 +11,21 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80.0,
+        elevation: 0, // Remove shadow
         backgroundColor: Color.fromRGBO(144, 94, 150, 1),
-        title: Row(
-          children: [
-            Image.asset(
-              'images/logo.png',
-              height: 75.0,
-            ),
-            SizedBox(width: 10.0),
-            Text(
-              'EZ MOOC',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        leading: Image.asset(
+          'images/logo.png', // Replace with your logo asset
+          height: 75.0,
         ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: Image.asset(
-              'images/find.png',
+              'images/search_icon.png', // Replace with your search icon asset
               height: 50.0,
             ),
           ),
@@ -47,11 +33,12 @@ class HomeView extends GetView<HomeController> {
       ),
       body: Column(
         children: [
+          // Category Section
           Container(
             height: 120.0,
+            padding: EdgeInsets.all(10.0),
             child: ListView(
               scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.all(10.0),
               children: [
                 _buildCategoryCard('images/TV.png', 'ศาสนา'),
                 _buildCategoryCard('images/find.png', 'สุขภาพจิต'),
@@ -135,15 +122,6 @@ Widget _buildCategoryCard(String imagePath, String category) {
             height: 50.0,
           ),
           SizedBox(height: 8.0), // Adjust the spacing between image and text
-          Text(
-            category,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
         ],
       ),
     ),

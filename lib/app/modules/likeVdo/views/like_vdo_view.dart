@@ -10,7 +10,11 @@ class LikeVdoView extends GetView<LikeVdoController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LikeVdoView'),
+        title: const Text('LikeVdoView',
+            style: TextStyle(
+              fontSize: 25.0,
+              fontFamily: 'Kanit',
+            )),
         centerTitle: true,
       ),
       body: const Center(

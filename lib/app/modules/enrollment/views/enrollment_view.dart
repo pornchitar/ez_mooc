@@ -14,7 +14,11 @@ class EnrollmentView extends GetView {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('คอร์สเรียนของคุณ'),
+        title: const Text('คอร์สเรียนของคุณ',
+            style: TextStyle(
+              fontSize: 25.0,
+              fontFamily: 'Kanit',
+            )),
         centerTitle: true,
       ),
       body: Center(
