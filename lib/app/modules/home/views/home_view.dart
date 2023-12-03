@@ -28,7 +28,7 @@ class HomeView extends GetView<HomeController> {
           IconButton(
             onPressed: () {},
             icon: Image.asset(
-              'images/search_icon.png', // Replace with your search icon asset
+              'images/find_icon.png', // Replace with your search icon asset
               height: 50.0,
             ),
           ),
@@ -58,11 +58,11 @@ class HomeView extends GetView<HomeController> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  _buildAllCardDetail('images/art_cat.png', 'อาหาร'),
-                  _buildAllCardDetail('images/art_cat.png', 'ธรรมมะ'),
+                  _buildAllCardDetail('images/cokking_icon.png', 'อาหาร'),
+                  _buildAllCardDetail('images/region_icon.png', 'ธรรมมะ'),
                   _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
-                  _buildAllCardDetail('images/art_cat.png', 'เทคโนโลยี'),
-                  _buildAllCardDetail('images/art_cat.png', 'พัฒนาจิต'),
+                  _buildAllCardDetail('images/com_icon.png', 'เทคโนโลยี'),
+                  _buildAllCardDetail('images/heart_icon.png', 'พัฒนาจิต'),
 
                   // Add more category cards as needed
                 ],
