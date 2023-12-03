@@ -62,7 +62,7 @@ class HomeView extends GetView<HomeController> {
                   children: [
                     for (var element in Get.find<CategoryService>().categories)
                       _buildAllCardDetail(
-                          'images/cokking_icon.png', element.categoryName)
+                          element.categoryImage, element.categoryName)
                     // _buildAllCardDetail('images/cokking_icon.png', 'อาหาร'),
                     // _buildAllCardDetail('images/region_icon.png', 'ธรรมมะ'),
                     // _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
@@ -183,7 +183,7 @@ Widget _buildCategoryCard(String imagePath) {
             color: backgroundColor.withOpacity(0.8),
           ),
           child: Center(
-            child: Image.asset(
+            child: Image.network(
               imagePath,
               height: 60.0,
             ),

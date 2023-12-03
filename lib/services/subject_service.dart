@@ -14,7 +14,8 @@ class SubjectService extends GetxService {
               categoryId: 1,
               categoryName: "ธรรมมะ",
               createdAt: '',
-              updatedAt: ''),
+              updatedAt: '',
+              categoryImage: ''),
           playlistLink:
               "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
           videos: [
@@ -56,7 +57,8 @@ class SubjectService extends GetxService {
             categoryId: 1,
             categoryName: "ธรรมมะ",
             createdAt: '',
-            updatedAt: ''),
+            updatedAt: '',
+            categoryImage: ''),
         playlistLink:
             "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
         videos: [

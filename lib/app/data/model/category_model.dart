@@ -2,6 +2,7 @@ class Category {
   int categoryId;
   String categoryName;
   String createdAt;
+  String categoryImage;
   String updatedAt;
   String? deletedAt;
 
@@ -10,6 +11,7 @@ class Category {
     required this.categoryName,
     required this.createdAt,
     required this.updatedAt,
+    required this.categoryImage,
     this.deletedAt,
   });
 
@@ -20,6 +22,7 @@ class Category {
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       deletedAt: json['deleted_at'],
+      categoryImage: json['CategoryImage'],
     );
   }
   //to Json
@@ -29,5 +32,6 @@ class Category {
         "created_at": createdAt,
         "updated_at": updatedAt,
         "deleted_at": deletedAt,
+        "CategoryImage": categoryImage,
       };
 }
