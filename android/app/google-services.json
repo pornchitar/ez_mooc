@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414407477341",
+    "project_id": "mooc-e2aa2",
+    "storage_bucket": "mooc-e2aa2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414407477341:android:13a5552d720f6aac3fa5b4",
+        "android_client_info": {
+          "package_name": "com.example.ez_mooc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU9DAqC4R7ldRsZnpv2xLtujlDOfVcZjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

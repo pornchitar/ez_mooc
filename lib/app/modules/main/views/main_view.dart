@@ -79,14 +79,19 @@ class MainView extends GetView<MainController> {
   Widget _getBody(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
+        controller.logEvent('enrollment', {'enrollment': 'enrollment'});
         return EnrollmentView();
       case 1:
+        controller.logEvent('history', {'history': 'history'});
         return HistoryView();
       case 2:
+        controller.logEvent('home', {'home': 'home'});
         return HomeView();
       case 3:
+        controller.logEvent('likeVdo', {'likeVdo': 'likeVdo'});
         return LikeVdoView();
       case 4:
+        controller.logEvent('profile', {'profile': 'profile'});
         return ProfileView();
       default:
         return Container(); // Handle default case or return an empty container.
