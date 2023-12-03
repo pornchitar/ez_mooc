@@ -72,13 +72,6 @@ class HomeView extends GetView<HomeController> {
                     for (var element in Get.find<CategoryService>().categories)
                       _buildAllCardDetail(
                           element.categoryImage, element.categoryName)
-                    // _buildAllCardDetail('images/cokking_icon.png', 'อาหาร'),
-                    // _buildAllCardDetail('images/region_icon.png', 'ธรรมมะ'),
-                    // _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
-                    // _buildAllCardDetail('images/com_icon.png', 'เทคโนโลยี'),
-                    // _buildAllCardDetail('images/heart_icon.png', 'พัฒนาจิต'),
-
-                    // Add more category cards as needed
                   ],
                 ),
               ),
@@ -108,13 +101,17 @@ class HomeView extends GetView<HomeController> {
                             .videos) {
                           print(element.videoURL);
                         }
-
+                        //set current playlist
+                        Get.find<SubjectService>().setCurrentPlaylist(
+                            Get.find<SubjectService>().playlists[index]);
+                        //ser vdoplaylist
                         Get.find<VdoDetailService>().setVdoPlaylists(
                           Get.find<SubjectService>()
                               .playlists[index]
                               .videos
                               .toList(),
                         );
+                        //sert current subject
                         Get.find<VdoDetailService>().currentSubject.value =
                             Get.find<SubjectService>().playlists[index];
 

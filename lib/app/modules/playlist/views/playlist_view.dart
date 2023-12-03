@@ -55,9 +55,15 @@ class _PlaylistViewState extends State<PlaylistView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(
-            () => Text('${subjectService.currentPlaylist.value.description}')),
+        backgroundColor: Color(0xff551E68),
+        title: Obx(() => Text(
+            '${subjectService.currentPlaylist.value.subjectName}',
+            style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold))),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Column(
         children: [
