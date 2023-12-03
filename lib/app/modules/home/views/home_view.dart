@@ -23,7 +23,16 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: Color(0xff551E68),
         leading: Image.asset(
           'images/logo.png', // Replace with your logo asset
-          height: 75.0,
+          height: 80.0,
+        ),
+        title: Text(
+          'MOOC',
+          style: TextStyle(
+            fontSize: 30.0,
+            fontFamily: 'Kanit',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         actions: [
           IconButton(
