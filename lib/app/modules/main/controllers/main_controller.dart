@@ -1,3 +1,4 @@
+import 'package:ez_mooc/services/subject_service.dart';
 import 'package:get/get.dart';
 
 class MainController extends GetxController {
@@ -7,6 +8,7 @@ class MainController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Get.find<SubjectService>().fetchAllSubjects();
   }
 
   void changeSelectedItem(int index) {

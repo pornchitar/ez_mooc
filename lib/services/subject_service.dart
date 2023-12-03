@@ -106,7 +106,7 @@ class SubjectService extends GetxService {
     try {
       List<Subject> fetchedSubjects = await subjectRepository.getAll();
       playlists.value = fetchedSubjects;
-      print("Subjects fetched: ${playlists.length}");
+      print("Subjects fetched: ${playlists.toJson()}");
     } catch (e) {
       print("Error fetching subjects: $e");
       // Handle exception, e.g., show an error message

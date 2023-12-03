@@ -10,14 +10,12 @@ import '../controllers/home_controller.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(
-      () => HomeController(),
-    );
-    Get.put(UserService());
-
-    Get.lazyPut(() => NavigationController());
+    Get.lazyPut(() => UserService()); // Changed to lazyPut for consistency
+    Get.lazyPut(
+        () => SubjectService()); // Moved before HomeController initialization
     Get.lazyPut(() => VdoDetailService());
     Get.lazyPut(() => EnrollmentService());
-    Get.put(SubjectService());
+    Get.lazyPut<HomeController>(
+        () => HomeController()); // Ensure this is after all required services
   }
 }

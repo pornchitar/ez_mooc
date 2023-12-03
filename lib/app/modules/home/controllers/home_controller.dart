@@ -13,7 +13,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    SubjectService().fetchAllSubjects();
   }
 
   Future<yt.Video> fetchVideoData(String videoId) async {
