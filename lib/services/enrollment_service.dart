@@ -58,11 +58,11 @@ class EnrollmentService extends GetxService {
         subjectId: playlist.subjectId,
         enrollmentDate: DateTime.now(),
         progress: List.generate(
-          playlist.vdoDetail.length,
+          playlist.videos.length,
           (index) => ProgressEnrollment(
             progressId: index,
             userId: Get.find<UserService>().currentUser.value.user_id,
-            videoId: playlist.vdoDetail[index].id,
+            videoId: playlist.videos[index].videoId,
             enrollmentId: lastIdReport.value,
             progressPercentage: 0,
             lastViewedTimestamp: DateTime.now(),

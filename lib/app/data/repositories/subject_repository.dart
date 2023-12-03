@@ -4,7 +4,7 @@ import 'package:ez_mooc/app/data/repositories/repository.dart';
 import 'package:http/http.dart' as http;
 
 class SubjectRepository extends IRepository<Subject> {
-  final String url = 'https://7b18-184-82-11-38.ngrok-free.app/api/';
+  final String url = 'https://7b18-184-82-11-38.ngrok-free.app/api';
 
   @override
   Future<void> insert(Subject t) async {
@@ -24,12 +24,16 @@ class SubjectRepository extends IRepository<Subject> {
   Future<List<Subject>> getAll() async {
     try {
       var response = await http.get(Uri.parse('$url/subjects'));
+      print('$url/subjects');
+
       if (response.statusCode == 200) {
-        Iterable jsonResponse = json.decode(response.body);
-        print('Response body: ${response.body}');
-        return jsonResponse
-            .map((subject) => Subject.fromJson(subject))
+        var decodedResponse = json.decode(response.body);
+        List<dynamic> subjectsJson = decodedResponse['data'];
+        List<Subject> subjects = subjectsJson
+            .map((subjectJson) => Subject.fromJson(subjectJson))
             .toList();
+
+        return subjects;
       } else {
         print('Failed to load subjects - Status code: ${response.statusCode}');
         print('Response body: ${response.body}');

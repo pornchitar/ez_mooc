@@ -1,37 +1,49 @@
 class VdoDetail {
-  int id;
-  String videoId;
+  int videoId;
+  int subjectId;
   String videoTitle;
-  String videoUrl;
-  String channelName;
+  String videoURL;
   String thumbnail;
+  String channelName;
+  String videoCode;
+  String createdAt;
+  String updatedAt;
 
   VdoDetail({
-    required this.id,
     required this.videoId,
+    required this.subjectId,
     required this.videoTitle,
-    required this.videoUrl,
-    required this.channelName,
+    required this.videoURL,
     required this.thumbnail,
+    required this.channelName,
+    required this.videoCode,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory VdoDetail.fromJson(Map<String, dynamic> json) {
     return VdoDetail(
-      id: json['id'],
-      videoId: json['videoId'],
-      videoTitle: json['videoTitle'],
-      videoUrl: json['videoUrl'],
-      channelName: json['channelName'],
-      thumbnail: json['thumbnail'],
+      videoId: json['VideoID'],
+      subjectId: json['SubjectID'],
+      videoTitle: json['VideoTitle'],
+      videoURL: json['VideoURL'],
+      thumbnail: json['Thumbnail'],
+      channelName: json['ChannelName'],
+      videoCode: json['VideoCode'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
-
+  //to json
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'videoId': videoId,
-        'videoTitle': videoTitle,
-        'videoUrl': videoUrl,
-        'channelName': channelName,
-        'thumbnail': thumbnail,
+        "VideoID": videoId,
+        "SubjectID": subjectId,
+        "VideoTitle": videoTitle,
+        "VideoURL": videoURL,
+        "Thumbnail": thumbnail,
+        "ChannelName": channelName,
+        "VideoCode": videoCode,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }

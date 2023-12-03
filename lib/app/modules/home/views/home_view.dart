@@ -93,14 +93,14 @@ class HomeView extends GetView<HomeController> {
                     onTap: () {
                       for (var element in Get.find<SubjectService>()
                           .playlists[index]
-                          .vdoDetail) {
-                        print(element.videoUrl);
+                          .videos) {
+                        print(element.videoURL);
                       }
 
                       Get.find<VdoDetailService>().setVdoPlaylists(
                         Get.find<SubjectService>()
                             .playlists[index]
-                            .vdoDetail
+                            .videos
                             .toList(),
                       );
                       Get.find<VdoDetailService>().currentSubject.value =
@@ -110,7 +110,7 @@ class HomeView extends GetView<HomeController> {
                           Get.find<VdoDetailService>()
                               .currentSubject
                               .value
-                              .vdoDetail[0]);
+                              .videos[0]);
 
                       Get.find<EnrollmentService>().addEnrollment(
                           Get.find<SubjectService>().playlists[index]);
@@ -118,8 +118,8 @@ class HomeView extends GetView<HomeController> {
                       Get.find<EnrollmentService>().setCurrentVdoId(
                           Get.find<SubjectService>()
                               .playlists[index]
-                              .vdoDetail[0]
-                              .id);
+                              .videos[0]
+                              .videoId);
                       Get.toNamed('/playlist');
                     },
                   );

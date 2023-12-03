@@ -25,7 +25,7 @@ class VdoPageController extends GetxController {
 
   void initializeYoutubePlayer() {
     youtubePlayerController = YoutubePlayerController(
-      initialVideoId: Get.find<VdoDetailService>().getCurrentVdo().videoId,
+      initialVideoId: Get.find<VdoDetailService>().getCurrentVdo().videoCode,
       flags: YoutubePlayerFlags(autoPlay: true, mute: false),
     )..addListener(listener);
   }
@@ -67,7 +67,7 @@ class VdoPageController extends GetxController {
   void handleVideoEnd() {
     int currentIndex = getIndexOfCurrentVideo();
     int totalVideos =
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail.length;
+        Get.find<VdoDetailService>().currentSubject.value.videos.length;
     savePercentageWatched(100); // Save 100% when the video ends
 
     print(
@@ -91,14 +91,14 @@ class VdoPageController extends GetxController {
 
   void playNextVideo(int index) {
     Get.find<VdoDetailService>().setCurrentVdo(
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail[index]);
+        Get.find<VdoDetailService>().currentSubject.value.videos[index]);
     Get.find<EnrollmentService>().currentVdoId.value =
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail[index].id;
+        Get.find<VdoDetailService>().currentSubject.value.videos[index].videoId;
     loadVideo(Get.find<VdoDetailService>()
         .currentSubject
         .value
-        .vdoDetail[index]
-        .videoId);
+        .videos[index]
+        .videoCode);
   }
 
   void disposeController() {
@@ -117,9 +117,9 @@ class VdoPageController extends GetxController {
 
   int getIndexOfCurrentVideo() {
     String currentVideoId =
-        Get.find<VdoDetailService>().getCurrentVdo().videoId;
+        Get.find<VdoDetailService>().getCurrentVdo().videoCode;
     List<VdoDetail> playlist =
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail;
+        Get.find<VdoDetailService>().currentSubject.value.videos;
 
     return playlist.indexWhere((video) => video.videoId == currentVideoId);
   }

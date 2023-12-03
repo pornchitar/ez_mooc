@@ -43,9 +43,9 @@ class EnrollmentView extends GetView {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: subject.vdoDetail.length,
+                          itemCount: subject.videos.length,
                           itemBuilder: (context, index_) {
-                            var vdo = subject.vdoDetail[index_];
+                            var vdo = subject.videos[index_];
 
                             return ListTile(
                               title: Text(vdo.videoTitle),

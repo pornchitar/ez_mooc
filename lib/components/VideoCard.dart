@@ -41,14 +41,38 @@ class VideoCard extends StatelessWidget {
     String namePlaylist,
     String authorPlaylist,
   ) {
-    print(namePlaylist);
-    return Container(
+    return Card(
       margin: EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 5.0,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
+          Container(
+            height: 50.0,
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+            decoration: BoxDecoration(
+              color: Colors.white, // Choose a color for the header
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10.0),
+                topRight: Radius.circular(10.0),
+              ),
+            ),
+            width: double.infinity,
+            child: Text(
+              'Header Title', // Replace with your actual header title
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.only(
+                // topLeft: Radius.circular(10.0),
+                // topRight: Radius.circular(10.0),
+                ),
             child: Image.network(
               vdoDetail.thumbnail ?? '',
               height: 200.0,
@@ -56,30 +80,34 @@ class VideoCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(height: 8.0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                Icon(Icons.library_music, color: Colors.black),
-                SizedBox(width: 8.0),
-                Expanded(
-                  child: Text(
-                    namePlaylist,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.library_music, color: Colors.black),
+                    SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        namePlaylist,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  ],
+                ),
+                Text(
+                  '${authorPlaylist} • ${_formatUploadDate(DateTime.now())}',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12.0,
                   ),
                 ),
               ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              '${authorPlaylist} • ${_formatUploadDate(DateTime.now())}',
             ),
           ),
         ],
@@ -110,24 +138,29 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     var firstVideo = await ytClient.playlists.getVideos(playlistId).first;
 
     var vdoDetail = VdoDetail(
-      id: 1,
-      videoId: playlistId.value,
-      videoTitle: playlist.title,
-      videoUrl: firstVideo.url.toString(),
-      channelName: playlist.author,
-      thumbnail: firstVideo.thumbnails.highResUrl,
-    );
+        videoId: 1,
+        subjectId: 1,
+        videoTitle: playlist.title,
+        videoURL: firstVideo.url.toString(),
+        thumbnail: firstVideo.thumbnails.highResUrl,
+        channelName: playlist.author,
+        videoCode: '',
+        createdAt: '',
+        updatedAt: '');
 
     return vdoDetail;
   } catch (e) {
     print('Error: $e');
     return VdoDetail(
-        id: -1,
-        videoId: "",
-        videoTitle: "",
-        videoUrl: "",
-        channelName: "",
-        thumbnail: "");
+        videoId: 1,
+        subjectId: 1,
+        videoTitle: '',
+        videoURL: '',
+        thumbnail: '',
+        channelName: '',
+        videoCode: '',
+        createdAt: '',
+        updatedAt: '');
   } finally {
     ytClient.close();
   }

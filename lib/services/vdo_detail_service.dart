@@ -7,21 +7,27 @@ class VdoDetailService extends GetxService {
   RxList<VdoDetail> vdoPlaylists = RxList<VdoDetail>.of([]).obs();
 
   Rx<Subject> currentSubject = Subject(
-          subjectId: 1,
-          subjectName: "",
-          description: "",
-          playlistLink: "",
-          vdoDetail: [],
-          category: Category(categoryId: 1, categoryName: ""))
-      .obs;
+      subjectId: 1,
+      subjectName: "",
+      description: "",
+      playlistLink: "",
+      category: Category(
+          categoryId: 1, categoryName: "", createdAt: '', updatedAt: ''),
+      categoryId: 1,
+      createdAt: '',
+      updatedAt: '',
+      videos: []).obs;
   Rx<VdoDetail> currentDetail = VdoDetail(
-    id: 1,
-    videoId: "",
-    videoTitle: "",
-    videoUrl: "",
-    channelName: "",
-    thumbnail: "",
-  ).obs;
+          videoId: 1,
+          subjectId: 1,
+          videoTitle: "",
+          videoURL: "",
+          thumbnail: "",
+          channelName: "",
+          videoCode: "",
+          createdAt: "",
+          updatedAt: "")
+      .obs;
   RxString currentVdoUrl = "".obs;
 
   //get vdoPlaylists

@@ -37,7 +37,7 @@ class _PlaylistViewState extends State<PlaylistView> {
         var regExp = RegExp(
             r'^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})');
 
-        var match = regExp.firstMatch(vdourl.videoUrl);
+        var match = regExp.firstMatch(vdourl.videoURL);
         if (match != null && match.groupCount >= 1) {
           var vdourl_ = match.group(1);
           var video = await ytClient.videos.get(yt.VideoId(vdourl_.toString()));
@@ -70,7 +70,7 @@ class _PlaylistViewState extends State<PlaylistView> {
               future: fetchAllVideoData(Get.find<VdoDetailService>()
                   .currentSubject
                   .value
-                  .vdoDetail
+                  .videos
                   .toList()),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -98,23 +98,23 @@ class _PlaylistViewState extends State<PlaylistView> {
                               Get.find<VdoDetailService>()
                                   .currentSubject
                                   .value
-                                  .vdoDetail[index]
-                                  .id;
+                                  .videos[index]
+                                  .videoId;
                           print(
                               "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
                           Get.find<VdoDetailService>().setCurrentVdo(
                               Get.find<VdoDetailService>()
                                   .currentSubject
                                   .value
-                                  .vdoDetail
+                                  .videos
                                   .toList()[index]);
                           Get.find<VdoPageController>().loadVideo(
                               Get.find<VdoDetailService>()
                                   .currentSubject
                                   .value
-                                  .vdoDetail
+                                  .videos
                                   .toList()[index]
-                                  .videoId);
+                                  .videoCode);
 
                           print(
                               "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");

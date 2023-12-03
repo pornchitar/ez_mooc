@@ -3,37 +3,51 @@ import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 
 class Subject {
   int subjectId;
+  int categoryId;
   String subjectName;
   String description;
   String playlistLink;
-  List<VdoDetail> vdoDetail;
+  String createdAt;
+  String updatedAt;
   Category category;
+  List<VdoDetail> videos;
 
   Subject({
     required this.subjectId,
+    required this.categoryId,
     required this.subjectName,
     required this.description,
     required this.playlistLink,
-    required this.vdoDetail,
+    required this.createdAt,
+    required this.updatedAt,
     required this.category,
+    required this.videos,
   });
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
-      subjectId: json['subjectId'],
-      subjectName: json['subjectName'],
-      description: json['description'],
-      playlistLink: json['playlistLink'],
-      vdoDetail: json['vdoDetail'],
-      category: Category.fromJson(json['category']),
+      subjectId: json['SubjectID'],
+      categoryId: json['CategoryID'],
+      subjectName: json['SubjectName'],
+      description: json['Description'],
+      playlistLink: json['PlaylistLink'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      category: Category.fromJson(json['categories']),
+      videos: List<VdoDetail>.from(
+          json['videos'].map((x) => VdoDetail.fromJson(x))),
     );
   }
-
+  //to json
   Map<String, dynamic> toJson() => {
-        'subjectId': subjectId,
-        'subjectName': subjectName,
-        'description': description,
-        'playlistLink': playlistLink,
-        'vdoDetail': vdoDetail,
+        "SubjectID": subjectId,
+        "CategoryID": categoryId,
+        "SubjectName": subjectName,
+        "Description": description,
+        "PlaylistLink": playlistLink,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
+        "categories": category.toJson(),
+        "videos": List<dynamic>.from(videos.map((x) => x.toJson())),
       };
 }
