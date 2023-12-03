@@ -1,3 +1,4 @@
+import 'package:ez_mooc/services/category_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +10,7 @@ class MainController extends GetxController {
   void onInit() {
     super.onInit();
     Get.find<SubjectService>().fetchAllSubjects();
+    Get.find<CategoryService>().fetchAllCategories();
   }
 
   void changeSelectedItem(int index) {

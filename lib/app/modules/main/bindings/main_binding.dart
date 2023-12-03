@@ -5,6 +5,7 @@ import 'package:ez_mooc/app/modules/likeVdo/controllers/like_vdo_controller.dart
 import 'package:ez_mooc/app/modules/playlist/controllers/playlist_controller.dart';
 import 'package:ez_mooc/app/modules/profile/controllers/profile_controller.dart';
 import 'package:ez_mooc/app/modules/vdo_page/controllers/vdo_page_controller.dart';
+import 'package:ez_mooc/services/category_service.dart';
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/user_service.dart';
@@ -26,6 +27,7 @@ class MainBinding extends Bindings {
     Get.lazyPut(() => EnrollmentController());
     Get.put(ProfileController());
     Get.put(SubjectService());
+    Get.put(CategoryService());
     Get.put(UserService());
     Get.put(VdoDetailService());
     Get.lazyPut(() => EnrollmentService());

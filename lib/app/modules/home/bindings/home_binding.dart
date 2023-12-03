@@ -1,3 +1,4 @@
+import 'package:ez_mooc/services/category_service.dart';
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/home_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
@@ -17,5 +18,6 @@ class HomeBinding extends Bindings {
     Get.lazyPut(() => EnrollmentService());
     Get.lazyPut<HomeController>(
         () => HomeController()); // Ensure this is after all required services
+    Get.lazyPut(() => CategoryService());
   }
 }

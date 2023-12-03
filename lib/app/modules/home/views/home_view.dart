@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/components/VideoCard.dart';
+import 'package:ez_mooc/services/category_service.dart';
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
@@ -59,11 +60,14 @@ class HomeView extends GetView<HomeController> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    _buildAllCardDetail('images/cokking_icon.png', 'อาหาร'),
-                    _buildAllCardDetail('images/region_icon.png', 'ธรรมมะ'),
-                    _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
-                    _buildAllCardDetail('images/com_icon.png', 'เทคโนโลยี'),
-                    _buildAllCardDetail('images/heart_icon.png', 'พัฒนาจิต'),
+                    for (var element in Get.find<CategoryService>().categories)
+                      _buildAllCardDetail(
+                          'images/cokking_icon.png', element.categoryName)
+                    // _buildAllCardDetail('images/cokking_icon.png', 'อาหาร'),
+                    // _buildAllCardDetail('images/region_icon.png', 'ธรรมมะ'),
+                    // _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
+                    // _buildAllCardDetail('images/com_icon.png', 'เทคโนโลยี'),
+                    // _buildAllCardDetail('images/heart_icon.png', 'พัฒนาจิต'),
 
                     // Add more category cards as needed
                   ],
