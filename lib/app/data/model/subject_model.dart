@@ -1,3 +1,4 @@
+import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 
 class Subject {
@@ -6,6 +7,7 @@ class Subject {
   String description;
   String playlistLink;
   List<VdoDetail> vdoDetail;
+  Category category;
 
   Subject({
     required this.subjectId,
@@ -13,6 +15,7 @@ class Subject {
     required this.description,
     required this.playlistLink,
     required this.vdoDetail,
+    required this.category,
   });
 
   factory Subject.fromJson(Map<String, dynamic> json) {
@@ -22,6 +25,7 @@ class Subject {
       description: json['description'],
       playlistLink: json['playlistLink'],
       vdoDetail: json['vdoDetail'],
+      category: Category.fromJson(json['category']),
     );
   }
 

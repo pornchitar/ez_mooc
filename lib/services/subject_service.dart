@@ -1,19 +1,24 @@
+import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/app/data/repositories/subject_repository.dart';
 import 'package:get/get.dart';
 
 class SubjectService extends GetxService {
+  final SubjectRepository subjectRepository = SubjectRepository();
   Rx<Subject> currentPlaylist = Subject(
       subjectId: 1,
       subjectName: "",
       description: "",
       playlistLink: "",
+      category: Category(categoryId: 1, categoryName: "ทำอาหาร"),
       vdoDetail: []).obs;
   RxList<Subject> playlists = RxList<Subject>.of([
     Subject(
         subjectId: 1,
         subjectName: "RLCraft ครัวเหลี่ยมข้าวอร่อย",
         description: "",
+        category: Category(categoryId: 1, categoryName: "ทำอาหาร"),
         playlistLink:
             "https://youtube.com/playlist?list=PLfwth3WMQnSMixTxh6NKIxqAGe89t-56H&si=_ZX5xBAIeCx2BDgN",
         vdoDetail: [
@@ -39,6 +44,7 @@ class SubjectService extends GetxService {
         subjectId: 2,
         subjectName: "รวมเรื่องเล่า The Ghost Radio",
         description: "",
+        category: Category(categoryId: 1, categoryName: "ธรรมมะ"),
         playlistLink:
             "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
         vdoDetail: [
@@ -73,5 +79,16 @@ class SubjectService extends GetxService {
 
   void setCurrentPlaylist(Subject playlist) {
     currentPlaylist.value = playlist;
+  }
+
+  Future<void> fetchAllSubjects() async {
+    try {
+      List<Subject> fetchedSubjects = await subjectRepository.getAll();
+      playlists.value = fetchedSubjects;
+      print("Subjects fetched: ${playlists.length}");
+    } catch (e) {
+      print("Error fetching subjects: $e");
+      // Handle exception, e.g., show an error message
+    }
   }
 }
