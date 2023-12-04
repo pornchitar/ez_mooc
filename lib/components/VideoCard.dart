@@ -1,11 +1,14 @@
 import 'dart:ffi';
 
+import 'package:card_loading/card_loading.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 class VideoCard extends StatelessWidget {
   final String videoUrl;
@@ -18,10 +21,11 @@ class VideoCard extends StatelessWidget {
       future: extractPlaylistInfo(videoUrl),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            child: CircularProgressIndicator(),
-            width: 30,
-            height: 30,
+          // Replace CircularProgressIndicator with SkeletonLoader
+          return SkeletonLoader(
+            builder: _buildSkeletonLoader(),
+            items: 10, // Number of skeleton loaders
+            period: Duration(seconds: 2), // Duration of the animation loop
           );
         } else if (snapshot.hasError) {
           return Text('Error loading video details');
@@ -30,12 +34,32 @@ class VideoCard extends StatelessWidget {
           var subject = Get.find<SubjectService>().playlists.firstWhere(
               (element) => element.subjectId == vdoDetail.subjectId);
 
-          return _buildVideoCard(vdoDetail, snapshot.data!.videoTitle,
-              snapshot.data!.channelName, subject.description);
+          return _buildVideoCard(
+            vdoDetail,
+            snapshot.data!.videoTitle,
+            snapshot.data!.channelName,
+            subject.description,
+          );
         } else {
           return Text('Unknown error occurred');
         }
       },
+    );
+  }
+
+  Widget _buildSkeletonLoader() {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 5.0,
+      child: CardLoading(
+        height: 80,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        width: 100,
+        margin: EdgeInsets.only(bottom: 10),
+      ),
     );
   }
 
