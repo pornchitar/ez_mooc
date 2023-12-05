@@ -10,12 +10,12 @@ class SubjectService extends GetxService {
           subjectId: 2,
           subjectName: "รวมเรื่องเล่า The Ghost Radio",
           description: "",
-          category: Category(
-              categoryId: 1,
-              categoryName: "ธรรมมะ",
-              createdAt: '',
-              updatedAt: '',
-              categoryImage: ''),
+          // category: Category(
+          //     categoryId: 1,
+          //     categoryName: "ธรรมมะ",
+          //     createdAt: '',
+          //     updatedAt: '',
+          //     categoryImage: ''),
           playlistLink:
               "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
           videos: [
@@ -53,12 +53,12 @@ class SubjectService extends GetxService {
         subjectId: 2,
         subjectName: "รวมเรื่องเล่า The Ghost Radio",
         description: "",
-        category: Category(
-            categoryId: 1,
-            categoryName: "ธรรมมะ",
-            createdAt: '',
-            updatedAt: '',
-            categoryImage: ''),
+        // category: Category(
+        //     categoryId: 1,
+        //     categoryName: "ธรรมมะ",
+        //     createdAt: '',
+        //     updatedAt: '',
+        //     categoryImage: ''),
         playlistLink:
             "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
         videos: [

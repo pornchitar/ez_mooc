@@ -11,12 +11,12 @@ class VdoDetailService extends GetxService {
       subjectName: "",
       description: "",
       playlistLink: "",
-      category: Category(
-          categoryId: 1,
-          categoryName: "",
-          createdAt: '',
-          updatedAt: '',
-          categoryImage: ''),
+      // category: Category(
+      //     categoryId: 1,
+      //     categoryName: "",
+      //     createdAt: '',
+      //     updatedAt: '',
+      //     categoryImage: ''),
       categoryId: 1,
       createdAt: '',
       updatedAt: '',

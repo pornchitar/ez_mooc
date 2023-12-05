@@ -1,10 +1,12 @@
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
 import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
+import 'package:ez_mooc/app/data/repositories/enrollment_repository.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
 
 class EnrollmentService extends GetxService {
+  final enrollmentRepository = EnrollmentRepository();
   RxList<Enrollment> enrollments = <Enrollment>[].obs;
   RxInt lastIdReport = 0.obs;
   RxInt indexVdo = 1.obs;
@@ -103,6 +105,16 @@ class EnrollmentService extends GetxService {
     } else {
       // Invalid YouTube URL
       throw Exception('Invalid YouTube URL');
+    }
+  }
+
+  Future<void> fetchAllEnrollments() async {
+    try {
+      List<Enrollment> fetchedEnrollments = await enrollmentRepository.getAll();
+      enrollments.value = fetchedEnrollments;
+      print("Enrollments fetched: ${enrollments.toJson()}");
+    } catch (e) {
+      print(e);
     }
   }
 }

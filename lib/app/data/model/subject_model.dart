@@ -9,7 +9,7 @@ class Subject {
   String playlistLink;
   String createdAt;
   String updatedAt;
-  Category category;
+  // Category category;
   List<VdoDetail> videos;
 
   Subject({
@@ -20,24 +20,25 @@ class Subject {
     required this.playlistLink,
     required this.createdAt,
     required this.updatedAt,
-    required this.category,
+    // required this.category,
     required this.videos,
   });
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
-      subjectId: json['SubjectID'],
-      categoryId: json['CategoryID'],
+      subjectId: json['SubjectID'] ?? 0, // Provide a default value if null
+      categoryId: json['CategoryID'] ?? 0, // Provide a default value if null
       subjectName: json['SubjectName'],
       description: json['Description'],
       playlistLink: json['PlaylistLink'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
-      category: Category.fromJson(json['categories']),
       videos: List<VdoDetail>.from(
-          json['videos'].map((x) => VdoDetail.fromJson(x))),
+        json['videos'].map((x) => VdoDetail.fromJson(x)),
+      ),
     );
   }
+
   //to json
   Map<String, dynamic> toJson() => {
         "SubjectID": subjectId,
@@ -47,7 +48,7 @@ class Subject {
         "PlaylistLink": playlistLink,
         "created_at": createdAt,
         "updated_at": updatedAt,
-        "categories": category.toJson(),
+        // "categories": category.toJson(),
         "videos": List<dynamic>.from(videos.map((x) => x.toJson())),
       };
 }
