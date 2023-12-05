@@ -44,99 +44,108 @@ class HomeView extends GetView<HomeController> {
           ),
         ],
       ),
-      body: Obx(
-        () => Container(
-          color: Color(0xFFEDE4FF),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Category Section
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                child: Text(
-                  'หมวดหมู่',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontFamily: 'Kanit',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Container(
-                height: 180.0,
-                padding: EdgeInsets.all(10.0),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Obx(
+              () => Container(
+                color: Color(0xFFEDE4FF),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    for (var element in Get.find<CategoryService>().categories)
-                      _buildAllCardDetail(
-                          element.categoryImage, element.categoryName)
+                    // Category Section
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                      child: Text(
+                        'หมวดหมู่',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 180.0,
+                      padding: EdgeInsets.all(10.0),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          for (var element
+                              in Get.find<CategoryService>().categories)
+                            _buildAllCardDetail(
+                                element.categoryImage, element.categoryName)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        'แนะนำสำหรับคุณ',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: Get.find<SubjectService>().playlists.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: VideoCard(
+                            videoUrl: Get.find<SubjectService>()
+                                .playlists[index]
+                                .playlistLink,
+                          ),
+                          onTap: () {
+                            for (var element in Get.find<SubjectService>()
+                                .playlists[index]
+                                .videos) {
+                              print(element.videoURL);
+                            }
+                            //set current playlist
+                            Get.find<SubjectService>().setCurrentPlaylist(
+                                Get.find<SubjectService>().playlists[index]);
+                            //ser vdoplaylist
+                            Get.find<VdoDetailService>().setVdoPlaylists(
+                              Get.find<SubjectService>()
+                                  .playlists[index]
+                                  .videos
+                                  .toList(),
+                            );
+                            //sert current subject
+                            Get.find<VdoDetailService>().currentSubject.value =
+                                Get.find<SubjectService>().playlists[index];
+
+                            Get.find<VdoDetailService>().setCurrentVdo(
+                                Get.find<VdoDetailService>()
+                                    .currentSubject
+                                    .value
+                                    .videos[0]);
+
+                            Get.find<EnrollmentService>().addEnrollment(
+                                Get.find<SubjectService>().playlists[index]);
+
+                            Get.find<EnrollmentService>().setCurrentVdoId(
+                                Get.find<SubjectService>()
+                                    .playlists[index]
+                                    .videos[0]
+                                    .videoId);
+                            Get.toNamed('/playlist');
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Text('แนะนำสำหรับคุณ',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: 'Kanit',
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: Get.find<SubjectService>().playlists.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      child: VideoCard(
-                        videoUrl: Get.find<SubjectService>()
-                            .playlists[index]
-                            .playlistLink,
-                      ),
-                      onTap: () {
-                        for (var element in Get.find<SubjectService>()
-                            .playlists[index]
-                            .videos) {
-                          print(element.videoURL);
-                        }
-                        //set current playlist
-                        Get.find<SubjectService>().setCurrentPlaylist(
-                            Get.find<SubjectService>().playlists[index]);
-                        //ser vdoplaylist
-                        Get.find<VdoDetailService>().setVdoPlaylists(
-                          Get.find<SubjectService>()
-                              .playlists[index]
-                              .videos
-                              .toList(),
-                        );
-                        //sert current subject
-                        Get.find<VdoDetailService>().currentSubject.value =
-                            Get.find<SubjectService>().playlists[index];
-
-                        Get.find<VdoDetailService>().setCurrentVdo(
-                            Get.find<VdoDetailService>()
-                                .currentSubject
-                                .value
-                                .videos[0]);
-
-                        Get.find<EnrollmentService>().addEnrollment(
-                            Get.find<SubjectService>().playlists[index]);
-
-                        Get.find<EnrollmentService>().setCurrentVdoId(
-                            Get.find<SubjectService>()
-                                .playlists[index]
-                                .videos[0]
-                                .videoId);
-                        Get.toNamed('/playlist');
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
