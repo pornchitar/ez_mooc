@@ -21,8 +21,6 @@ class VideoCard extends StatelessWidget {
       future: extractPlaylistInfo(videoUrl),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // return CircularProgressIndicator();
-          // Replace CircularProgressIndicator with SkeletonLoader
           return SkeletonLoader(
             builder: _buildSkeletonLoader(),
             items: 10, // Number of skeleton loaders
