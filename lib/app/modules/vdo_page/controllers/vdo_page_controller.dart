@@ -21,6 +21,8 @@ class VdoPageController extends GetxController {
   void onInit() {
     super.onInit();
     initializeYoutubePlayer();
+    print("VdoPageController initialized");
+    print(Get.find<VdoDetailService>().getCurrentVdo().videoId);
   }
 
   void initializeYoutubePlayer() {
@@ -34,10 +36,17 @@ class VdoPageController extends GetxController {
     var playerState = youtubePlayerController.value.playerState;
     if (playerState == PlayerState.ended) {
       print("Video ended");
+      // print all enrollments to toJson
+      print(Get.find<EnrollmentService>().enrollments.toJson());
+
       handleVideoEnd();
     } else if (playerState == PlayerState.playing) {
+      print(Get.find<EnrollmentService>().enrollments.toJson());
+
       managePeriodicUpdate();
     } else if (playerState == PlayerState.paused) {
+      print(Get.find<EnrollmentService>().enrollments.toJson());
+
       savePercentageWatched(percentageWatched.value);
     }
 
@@ -116,8 +125,7 @@ class VdoPageController extends GetxController {
   }
 
   int getIndexOfCurrentVideo() {
-    String currentVideoId =
-        Get.find<VdoDetailService>().getCurrentVdo().videoCode;
+    int currentVideoId = Get.find<VdoDetailService>().getCurrentVdo().videoId;
     List<VdoDetail> playlist =
         Get.find<VdoDetailService>().currentSubject.value.videos;
 

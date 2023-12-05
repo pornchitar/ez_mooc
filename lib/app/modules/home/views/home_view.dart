@@ -128,6 +128,10 @@ class HomeView extends GetView<HomeController> {
                                     .value
                                     .videos[0]);
 
+                            print(Get.find<VdoDetailService>()
+                                .getCurrentVdo()
+                                .videoId);
+
                             Get.find<EnrollmentService>().addEnrollment(
                                 Get.find<SubjectService>().playlists[index]);
 
