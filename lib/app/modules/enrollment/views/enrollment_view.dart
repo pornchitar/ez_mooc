@@ -127,14 +127,11 @@ class EnrollmentView extends GetView {
                         child: FAProgressBar(
                           maxValue: 100,
                           borderRadius: BorderRadius.circular(40),
-                          currentValue: enrollment.progress.isEmpty
-                              ? 0.0 // Default value when the list is empty
-                              : enrollment.progress
-                                      .map((progress) =>
-                                          progress.progressPercentage ?? 0)
-                                      .reduce(
-                                          (value, element) => value + element) /
-                                  enrollment.progress.length,
+                          currentValue: enrollment.progress
+                                  .map((progress) =>
+                                      progress.progressPercentage ?? 0)
+                                  .reduce((value, element) => value + element) /
+                              subject.videos.length,
                           displayText: '%',
                           progressGradient: LinearGradient(
                             colors: [

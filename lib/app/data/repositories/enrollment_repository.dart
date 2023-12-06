@@ -38,37 +38,31 @@ class EnrollmentRepository extends IRepository<Enrollment> {
   }
 
   //get enrolments by userId
+  //get enrolments by userId
   Future<List<Enrollment>> getEnrolmentsByUserId(int userId) async {
     try {
-      var response = await http.get(Uri.parse('$url/enrollments/$userId'));
+      var response = await http.get(Uri.parse('$url/enrollments/user/$userId'));
       print('$url/enrollments/$userId');
 
       if (response.statusCode == 200) {
         var decodedResponse = json.decode(response.body);
+        print(decodedResponse['data']);
 
-        // Check if the 'data' key exists and is a map
-        if (decodedResponse.containsKey('data') &&
-            decodedResponse['data'] is Map<String, dynamic>) {
-          Map<String, dynamic> enrollmentJson = decodedResponse['data'];
+        List<dynamic> subjectsJson = decodedResponse['data'];
+        List<Enrollment> enrollments = subjectsJson
+            .map((subjectJson) => Enrollment.fromJson(subjectJson))
+            .toList();
 
-          // Create a single Enrollment object from the map
-          Enrollment enrollment = Enrollment.fromJson(enrollmentJson);
-          print(enrollment.toJson());
-
-          return [enrollment];
-        } else {
-          print('Invalid response format - "data" is not a Map');
-          throw Exception('Failed to load enrolments');
-        }
+        return enrollments;
       } else {
         print(
-            'Failed to load enrolments - Status code: ${response.statusCode}');
+            'Failed to load enrollments - Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
-        throw Exception('Failed to load enrolments');
+        throw Exception('Failed to load enrollments');
       }
     } catch (e) {
-      print('Error fetching enrolments: $e');
-      throw Exception('Failed to load enrolments');
+      print('Error fetching enrollments: $e');
+      throw Exception('Failed to load enrollments');
     }
   }
 }

@@ -40,32 +40,17 @@ class ProgessRepository extends IRepository<ProgressEnrollment> {
   //get list progress  by user id
   Future<List<ProgressEnrollment>> getProgressByUserId(int userId) async {
     try {
-      var response = await http.get(Uri.parse('$url/progress/$userId'));
-      print('$url/progress/$userId');
+      var response = await http.get(Uri.parse('$url/progress/user/$userId'));
+      print('$url/progress');
 
       if (response.statusCode == 200) {
         var decodedResponse = json.decode(response.body);
+        List<dynamic> subjectsJson = decodedResponse['data'];
+        List<ProgressEnrollment> progress = subjectsJson
+            .map((subjectJson) => ProgressEnrollment.fromJson(subjectJson))
+            .toList();
 
-        print('Decoded response: $decodedResponse');
-
-        if (decodedResponse.containsKey('data')) {
-          // Check if 'data' is a map
-          if (decodedResponse['data'] is Map<String, dynamic>) {
-            // Convert the single object to a list
-            List<dynamic> progressJson = [decodedResponse['data']];
-            List<ProgressEnrollment> progress = progressJson
-                .map(
-                    (progressJson) => ProgressEnrollment.fromJson(progressJson))
-                .toList();
-            return progress;
-          } else {
-            print('Invalid response format - "data" is not a Map');
-            throw Exception('Failed to load progress');
-          }
-        } else {
-          print('Invalid response format - "data" key not found');
-          throw Exception('Failed to load progress');
-        }
+        return progress;
       } else {
         print('Failed to load progress - Status code: ${response.statusCode}');
         print('Response body: ${response.body}');

@@ -119,16 +119,16 @@ class EnrollmentService extends GetxService {
       // enrollments.value = fetchedEnrollments;
 
       //get progress by id
-      List<ProgressEnrollment> fetchedProgress =
-          await progessEnrollment.getProgressByUserId(
-              Get.find<UserService>().getCurrentUser().user_id);
-      print(fetchedProgress.toList().map((e) => e.toJson()).toList());
-      //map fetchedEnrollments and fetchedProgress
-      for (var element in fetchedEnrollments) {
-        element.progress = fetchedProgress
-            .where((progress) => progress.enrollmentId == element.enrollmentId)
-            .toList();
-      }
+      // List<ProgressEnrollment> fetchedProgress =
+      //     await progessEnrollment.getProgressByUserId(
+      //         Get.find<UserService>().getCurrentUser().user_id);
+      // print(fetchedProgress.toList().map((e) => e.toJson()).toList());
+      // //map fetchedEnrollments and fetchedProgress
+      // for (var element in fetchedEnrollments) {
+      //   element.progress = fetchedProgress
+      //       .where((progress) => progress.enrollmentId == element.enrollmentId)
+      //       .toList();
+      // }
       enrollments.value = fetchedEnrollments;
       print("Enrollments fetched: ${enrollments.toJson()}");
       return fetchedEnrollments;
