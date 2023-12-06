@@ -31,7 +31,6 @@ class EnrollmentView extends GetView {
                     Get.find<EnrollmentService>().enrollments[index];
                 var subject = Get.find<SubjectService>().playlists.firstWhere(
                     (element) => element.subjectId == enrollment.subjectId);
-
                 return Column(
                   children: [
                     ExpansionTile(
@@ -47,38 +46,76 @@ class EnrollmentView extends GetView {
                           itemBuilder: (context, index_) {
                             var vdo = subject.videos[index_];
 
-                            return ListTile(
-                              title: Text(vdo.videoTitle),
-                              subtitle: Text(subject.description.toString()),
-                              leading: CircularPercentIndicator(
-                                radius: 15.0,
-                                lineWidth: 5.0,
-                                percent: (enrollment
-                                        .progress[index_].progressPercentage /
-                                    100),
-                                center: enrollment.progress[index_]
-                                            .progressPercentage ==
-                                        100.0
-                                    ? const Text(
-                                        "100%",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 8.0,
-                                        ),
-                                      )
-                                    : Text(
-                                        "${(enrollment.progress[index_].progressPercentage).toStringAsPrecision(2)}%",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 8.0,
-                                        ),
+                            if (index_ < enrollment.progress.length) {
+                              return ListTile(
+                                title: Text(vdo.videoTitle),
+                                subtitle: Text(subject.description.toString()),
+                                leading: CircularPercentIndicator(
+                                  radius: 15.0,
+                                  lineWidth: 5.0,
+                                  percent: enrollment.progress[index_]
+                                              .progressPercentage !=
+                                          null
+                                      ? enrollment.progress[index_]
+                                              .progressPercentage /
+                                          100
+                                      : 0.00,
+                                  center: enrollment.progress[index_]
+                                              .progressPercentage ==
+                                          100.0
+                                      ? const Text(
+                                          "100%",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 8.0,
+                                          ),
+                                        )
+                                      : enrollment.progress[index_]
+                                                  .progressPercentage !=
+                                              null
+                                          ? Text(
+                                              "${(enrollment.progress[index_].progressPercentage).toStringAsPrecision(2)}%",
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8.0,
+                                              ),
+                                            )
+                                          : const Text(
+                                              "00%",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 8.0,
+                                              ),
+                                            ),
+                                  backgroundColor:
+                                      Color.fromARGB(255, 254, 236, 236),
+                                  progressColor:
+                                      const Color.fromARGB(255, 37, 243, 33),
+                                ),
+                              );
+                            } else {
+                              // Handle the case where enrollment.progress doesn't have data for this index
+                              return ListTile(
+                                  title: Text(vdo.videoTitle),
+                                  subtitle:
+                                      Text(subject.description.toString()),
+                                  // Provide an alternative content or skip progress display
+                                  // You can customize this part based on your requirements
+                                  leading: CircularPercentIndicator(
+                                    radius: 15.0,
+                                    lineWidth: 5.0,
+                                    percent: 0.00,
+                                    center: const Text(
+                                      "0.00%",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8.0,
                                       ),
-                                backgroundColor:
-                                    Color.fromARGB(255, 254, 236, 236),
-                                progressColor:
-                                    const Color.fromARGB(255, 37, 243, 33),
-                              ),
-                            );
+                                    ),
+                                    backgroundColor:
+                                        Color.fromARGB(255, 254, 236, 236),
+                                  ));
+                            }
                           },
                         ),
                       ],
@@ -94,7 +131,7 @@ class EnrollmentView extends GetView {
                               ? 0.0 // Default value when the list is empty
                               : enrollment.progress
                                       .map((progress) =>
-                                          progress.progressPercentage)
+                                          progress.progressPercentage ?? 0)
                                       .reduce(
                                           (value, element) => value + element) /
                                   enrollment.progress.length,

@@ -3,7 +3,7 @@ class ProgressEnrollment {
   int userId;
   int videoId;
   int enrollmentId;
-  double progressPercentage;
+  int progressPercentage;
   DateTime lastViewedTimestamp;
 
   ProgressEnrollment({
@@ -17,24 +17,23 @@ class ProgressEnrollment {
 
   factory ProgressEnrollment.fromJson(Map<String, dynamic> json) {
     return ProgressEnrollment(
-      progressId: json['progress_id'],
-      userId: json['user_id'],
-      videoId: json['video_id'],
-      enrollmentId: json['enrollment_id'],
-      progressPercentage: json['progress_percentage'],
-      lastViewedTimestamp: DateTime.parse(json['last_viewed_timestamp']),
+      progressId: json['ProgressID'],
+      userId: json['UserID'],
+      videoId: json['VideoID'],
+      enrollmentId: json['EnrollmentId'],
+      progressPercentage: json['ProgressPercentage'],
+      lastViewedTimestamp: DateTime.parse(json['lastViewedTimestamp']),
     );
   }
 
-  // to json
   Map<String, dynamic> toJson() {
     return {
-      'progress_id': progressId,
-      'user_id': userId,
-      'video_id': videoId,
-      'enrollment_id': enrollmentId,
-      'progress_percentage': progressPercentage,
-      'last_viewed_timestamp': lastViewedTimestamp.toIso8601String(),
+      'ProgressID': progressId,
+      'UserID': userId,
+      'VideoID': videoId,
+      'EnrollmentId': enrollmentId,
+      'ProgressPercentage': progressPercentage,
+      'lastViewedTimestamp': lastViewedTimestamp.toIso8601String(),
     };
   }
 }

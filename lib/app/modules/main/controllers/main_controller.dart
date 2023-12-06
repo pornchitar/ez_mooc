@@ -15,7 +15,7 @@ class MainController extends GetxController {
     super.onInit();
     Get.find<SubjectService>().fetchAllSubjects();
     Get.find<CategoryService>().fetchAllCategories();
-    Get.find<EnrollmentService>().fetchAllEnrollments();
+    Get.find<EnrollmentService>().getEnrolmentsByUserId();
   }
 
   void changeSelectedItem(int index) {

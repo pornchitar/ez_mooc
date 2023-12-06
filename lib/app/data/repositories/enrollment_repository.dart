@@ -5,7 +5,7 @@ import 'package:ez_mooc/app/data/repositories/repository.dart';
 import 'package:http/http.dart' as http;
 
 class EnrollmentRepository extends IRepository<Enrollment> {
-  final url = 'https://22b7-49-228-121-127.ngrok-free.app/api';
+  final url = 'https://4a67-49-228-185-23.ngrok-free.app/api';
 
   @override
   Future<void> delete(Enrollment t) {
@@ -45,11 +45,21 @@ class EnrollmentRepository extends IRepository<Enrollment> {
 
       if (response.statusCode == 200) {
         var decodedResponse = json.decode(response.body);
-        List<dynamic> enrolmentsJson = decodedResponse['data'];
-        List<Enrollment> enrolments = enrolmentsJson
-            .map((enrolmentJson) => Enrollment.fromJson(enrolmentJson))
-            .toList();
-        return enrolments;
+
+        // Check if the 'data' key exists and is a map
+        if (decodedResponse.containsKey('data') &&
+            decodedResponse['data'] is Map<String, dynamic>) {
+          Map<String, dynamic> enrollmentJson = decodedResponse['data'];
+
+          // Create a single Enrollment object from the map
+          Enrollment enrollment = Enrollment.fromJson(enrollmentJson);
+          print(enrollment.toJson());
+
+          return [enrollment];
+        } else {
+          print('Invalid response format - "data" is not a Map');
+          throw Exception('Failed to load enrolments');
+        }
       } else {
         print(
             'Failed to load enrolments - Status code: ${response.statusCode}');

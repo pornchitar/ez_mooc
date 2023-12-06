@@ -4,7 +4,7 @@ import 'package:ez_mooc/app/data/repositories/repository.dart';
 import 'package:http/http.dart' as http;
 
 class SubjectRepository extends IRepository<Subject> {
-  final url = 'https://22b7-49-228-121-127.ngrok-free.app/api';
+  final url = 'https://4a67-49-228-185-23.ngrok-free.app/api';
 
   @override
   Future<void> insert(Subject t) async {

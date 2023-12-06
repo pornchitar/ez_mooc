@@ -14,25 +14,26 @@ class Enrollment {
     required this.enrollmentDate,
     required this.progress,
   });
-
   factory Enrollment.fromJson(Map<String, dynamic> json) {
     return Enrollment(
-      enrollmentId: json['enrollment_id'],
-      userId: json['user_id'],
-      subjectId: json['subject_id'],
-      enrollmentDate: DateTime.parse(json['enrollment_date']),
-      progress: List<ProgressEnrollment>.from(json['progress']
-          .map((progress) => ProgressEnrollment.fromJson(progress))),
+      enrollmentId: json['EnrollmentID'],
+      userId: json['UserID'],
+      subjectId: json['SubjectID'],
+      enrollmentDate: DateTime.parse(json['EnrollmentDate']),
+      progress: (json['progress'] as List<dynamic>?)
+              ?.map((x) => ProgressEnrollment.fromJson(x))
+              .toList() ??
+          [],
     );
   }
 
   // to json
   Map<String, dynamic> toJson() {
     return {
-      'enrollment_id': enrollmentId,
-      'user_id': userId,
-      'subject_id': subjectId,
-      'enrollment_date': enrollmentDate.toIso8601String(),
+      'EnrollmentID': enrollmentId,
+      'UserID': userId,
+      'SubjectID': subjectId,
+      'EnrollmentDate': enrollmentDate.toIso8601String(),
       'progress': progress.map((progress) => progress.toJson()).toList(),
     };
   }

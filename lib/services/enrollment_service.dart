@@ -2,11 +2,13 @@ import 'package:ez_mooc/app/data/model/enrollment_model.dart';
 import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/repositories/enrollment_repository.dart';
+import 'package:ez_mooc/app/data/repositories/report_repository.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
 
 class EnrollmentService extends GetxService {
   final enrollmentRepository = EnrollmentRepository();
+  final progessEnrollment = ProgessRepository();
   RxList<Enrollment> enrollments = <Enrollment>[].obs;
   RxInt lastIdReport = 0.obs;
   RxInt indexVdo = 1.obs;
@@ -108,10 +110,40 @@ class EnrollmentService extends GetxService {
     }
   }
 
-  Future<void> fetchAllEnrollments() async {
+  Future<List<Enrollment>> getEnrolmentsByUserId() async {
     try {
-      List<Enrollment> fetchedEnrollments = await enrollmentRepository.getAll();
+      List<Enrollment> fetchedEnrollments =
+          await enrollmentRepository.getEnrolmentsByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+
+      // enrollments.value = fetchedEnrollments;
+
+      //get progress by id
+      List<ProgressEnrollment> fetchedProgress =
+          await progessEnrollment.getProgressByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+      print(fetchedProgress.toList().map((e) => e.toJson()).toList());
+      //map fetchedEnrollments and fetchedProgress
+      for (var element in fetchedEnrollments) {
+        element.progress = fetchedProgress
+            .where((progress) => progress.enrollmentId == element.enrollmentId)
+            .toList();
+      }
       enrollments.value = fetchedEnrollments;
+      print("Enrollments fetched: ${enrollments.toJson()}");
+      return fetchedEnrollments;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  //getList progess by user id
+  Future<void> getProgressByUserId() async {
+    try {
+      List<ProgressEnrollment> fetchedProgress =
+          await progessEnrollment.getProgressByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
       print("Enrollments fetched: ${enrollments.toJson()}");
     } catch (e) {
       print(e);

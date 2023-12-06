@@ -156,7 +156,7 @@ class VdoPageController extends GetxController {
       if (element.videoId == currentVideoId) {
         var videoProgress = currentEnrollment.progress
             .firstWhere((element) => element.videoId == currentVideoId);
-        videoProgress.progressPercentage = percentage;
+        videoProgress.progressPercentage = percentage.toInt();
         videoProgress.lastViewedTimestamp = DateTime.now();
         break;
       }
