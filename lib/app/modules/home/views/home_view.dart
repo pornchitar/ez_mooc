@@ -135,11 +135,16 @@ class HomeView extends GetView<HomeController> {
                             Get.find<EnrollmentService>().addEnrollment(
                                 Get.find<SubjectService>().playlists[index]);
 
-                            Get.find<EnrollmentService>().setCurrentVdoId(
+                            Get.find<VdoDetailService>().currentSubject =
+                                Get.find<SubjectService>().playlists[index].obs;
+                            Get.find<EnrollmentService>().currentVdoId =
                                 Get.find<SubjectService>()
                                     .playlists[index]
                                     .videos[0]
-                                    .videoId);
+                                    .videoId
+                                    .obs;
+                            print(
+                                'Current vdoId : ${Get.find<EnrollmentService>().currentVdoId.value}');
                             Get.toNamed('/playlist');
                           },
                         );

@@ -56,10 +56,11 @@ class VdoPageController extends GetxController {
     }
   }
 
+  @override
   void onClose() {
     youtubePlayerController.removeListener(listener);
     youtubePlayerController.dispose();
-    super.onClose();
+    saveTimer?.cancel();
   }
 
   void loadVideo(String videoId) {
@@ -138,7 +139,7 @@ class VdoPageController extends GetxController {
         100;
   }
 
-  void savePercentageWatched(double percentage) {
+  Future<void> savePercentageWatched(double percentage) async {
     EnrollmentService enrollmentService = Get.find<EnrollmentService>();
     VdoDetailService vdoDetailService = Get.find<VdoDetailService>();
 
@@ -151,22 +152,23 @@ class VdoPageController extends GetxController {
         "-------------------Enrollment not found for video ID: $currentVideoId -------------",
       ),
     );
-
+    print("currentEnrollment ${currentEnrollment.toJson()}");
     for (var element in currentEnrollment.progress) {
+      print("element.videoId ${element.videoId}");
+      print("currentVideoId ${currentVideoId}");
+
       if (element.videoId == currentVideoId) {
         var videoProgress = currentEnrollment.progress
             .firstWhere((element) => element.videoId == currentVideoId);
-        videoProgress.progressPercentage = percentage.toInt();
-        videoProgress.lastViewedTimestamp = DateTime.now();
+        element.progressPercentage = percentage.toInt();
+        element.lastViewedTimestamp = DateTime.now();
+        List<Enrollment> enroollList =
+            await enrollmentService.updatePersentageProgress(element);
+        print(enroollList.toString());
+
         break;
       }
     }
-
-    // Update the enrollment progress list
-    enrollmentService.enrollments
-        .firstWhere(
-            (enrollment) => enrollment.subjectId == currentSub.subjectId)
-        .progress = List.from(currentEnrollment.progress);
   }
 
   String extractYouTubeVideoId(String videoUrl) {

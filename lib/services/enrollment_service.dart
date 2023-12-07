@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 class EnrollmentService extends GetxService {
   final enrollmentRepository = EnrollmentRepository();
-  final progessEnrollment = ProgessRepository();
+  final progessEnrollmentRepository = ProgessRepository();
   RxList<Enrollment> enrollments = <Enrollment>[].obs;
   RxInt lastIdReport = 0.obs;
   RxInt indexVdo = 1.obs;
@@ -115,20 +115,17 @@ class EnrollmentService extends GetxService {
       List<Enrollment> fetchedEnrollments =
           await enrollmentRepository.getEnrolmentsByUserId(
               Get.find<UserService>().getCurrentUser().user_id);
+      List<ProgressEnrollment> fetchedProgress =
+          await progessEnrollmentRepository.getProgressByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+      //map fetchedProgress  with fetchedEnrollments
+      fetchedEnrollments.forEach((enrollment) {
+        enrollment.progress = fetchedProgress
+            .where(
+                (progress) => progress.enrollmentId == enrollment.enrollmentId)
+            .toList();
+      });
 
-      // enrollments.value = fetchedEnrollments;
-
-      //get progress by id
-      // List<ProgressEnrollment> fetchedProgress =
-      //     await progessEnrollment.getProgressByUserId(
-      //         Get.find<UserService>().getCurrentUser().user_id);
-      // print(fetchedProgress.toList().map((e) => e.toJson()).toList());
-      // //map fetchedEnrollments and fetchedProgress
-      // for (var element in fetchedEnrollments) {
-      //   element.progress = fetchedProgress
-      //       .where((progress) => progress.enrollmentId == element.enrollmentId)
-      //       .toList();
-      // }
       enrollments.value = fetchedEnrollments;
       print("Enrollments fetched: ${enrollments.toJson()}");
       return fetchedEnrollments;
@@ -142,11 +139,28 @@ class EnrollmentService extends GetxService {
   Future<void> getProgressByUserId() async {
     try {
       List<ProgressEnrollment> fetchedProgress =
-          await progessEnrollment.getProgressByUserId(
+          await progessEnrollmentRepository.getProgressByUserId(
               Get.find<UserService>().getCurrentUser().user_id);
       print("Enrollments fetched: ${enrollments.toJson()}");
     } catch (e) {
       print(e);
+    }
+  }
+
+  //update persentage use progress Repository
+  Future<List<Enrollment>> updatePersentageProgress(
+      ProgressEnrollment progressEnrollment) async {
+    try {
+      await progessEnrollmentRepository
+          .updatePersentageProgress(progressEnrollment);
+      Get.find<EnrollmentService>().enrollments.value =
+          await enrollmentRepository.getEnrolmentsByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+
+      return Get.find<EnrollmentService>().enrollments;
+    } catch (e) {
+      print('Error update progress: $e');
+      throw Exception('Failed to update progress');
     }
   }
 }
