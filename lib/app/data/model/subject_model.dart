@@ -1,9 +1,7 @@
-import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 
 class Subject {
   int subjectId;
-  int categoryId;
   String subjectName;
   String description;
   String playlistLink;
@@ -14,7 +12,6 @@ class Subject {
 
   Subject({
     required this.subjectId,
-    required this.categoryId,
     required this.subjectName,
     required this.description,
     required this.playlistLink,
@@ -26,13 +23,12 @@ class Subject {
 
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
-      subjectId: json['SubjectID'] ?? 0, // Provide a default value if null
-      categoryId: json['CategoryID'] ?? 0, // Provide a default value if null
-      subjectName: json['SubjectName'],
-      description: json['Description'],
-      playlistLink: json['PlaylistLink'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      subjectId: json['SubjectID'] ?? 0,
+      subjectName: json['SubjectName'] ?? '',
+      description: json['Description'] ?? '',
+      playlistLink: json['PlaylistLink'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
       videos: List<VdoDetail>.from(
         json['videos'].map((x) => VdoDetail.fromJson(x)),
       ),
@@ -42,13 +38,11 @@ class Subject {
   //to json
   Map<String, dynamic> toJson() => {
         "SubjectID": subjectId,
-        "CategoryID": categoryId,
         "SubjectName": subjectName,
         "Description": description,
         "PlaylistLink": playlistLink,
         "created_at": createdAt,
         "updated_at": updatedAt,
-        // "categories": category.toJson(),
         "videos": List<dynamic>.from(videos.map((x) => x.toJson())),
       };
 }

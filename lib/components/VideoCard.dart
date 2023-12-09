@@ -197,6 +197,7 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     var firstVideo = await ytClient.playlists.getVideos(playlistId).first;
 
     var vdoDetail = VdoDetail(
+        category: [],
         videoId: 1,
         subjectId: 1,
         videoTitle: playlist.title,
@@ -211,6 +212,7 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
   } catch (e) {
     print('Error: $e');
     return VdoDetail(
+        category: [],
         videoId: 1,
         subjectId: 1,
         videoTitle: '',

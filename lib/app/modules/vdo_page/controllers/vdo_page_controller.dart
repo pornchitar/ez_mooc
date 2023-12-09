@@ -26,6 +26,7 @@ class VdoPageController extends GetxController {
   }
 
   void initializeYoutubePlayer() {
+    print(Get.find<VdoDetailService>().getCurrentVdo().videoCode);
     youtubePlayerController = YoutubePlayerController(
       initialVideoId: Get.find<VdoDetailService>().getCurrentVdo().videoCode,
       flags: YoutubePlayerFlags(autoPlay: true, mute: false),
@@ -41,13 +42,17 @@ class VdoPageController extends GetxController {
 
       handleVideoEnd();
     } else if (playerState == PlayerState.playing) {
-      print(Get.find<EnrollmentService>().enrollments.toJson());
+      Duration currentPosition = youtubePlayerController.value.position;
+      if (currentPosition.inSeconds % 60 == 0) {
+        // Save percentage every 60 seconds (1 minute)
+        double percentage = calculatePercentageWatched(youtubePlayerController);
 
-      managePeriodicUpdate();
+        savePercentageWatched(percentage);
+      }
     } else if (playerState == PlayerState.paused) {
       print(Get.find<EnrollmentService>().enrollments.toJson());
-
-      savePercentageWatched(percentageWatched.value);
+      double percentage = calculatePercentageWatched(youtubePlayerController);
+      savePercentageWatched(percentage);
     }
 
     // Update observable variable for player readiness
@@ -63,10 +68,10 @@ class VdoPageController extends GetxController {
     saveTimer?.cancel();
   }
 
-  void loadVideo(String videoId) {
+  void loadVideo(String videoCode) {
     try {
       // Instead of creating a new controller, update the existing one
-      youtubePlayerController.load(videoId);
+      youtubePlayerController.load(videoCode);
       youtubePlayerController
           .play(); // You may need to add this line if it's not playing automatically
     } catch (e) {
@@ -89,14 +94,6 @@ class VdoPageController extends GetxController {
       print("All videos ended");
       // Optionally, you may want to do something when all videos are finished.
     }
-  }
-
-  void managePeriodicUpdate() {
-    saveTimer?.cancel(); // Cancel previous timer
-    saveTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      double percentage = calculatePercentageWatched(youtubePlayerController);
-      savePercentageWatched(percentage);
-    });
   }
 
   void playNextVideo(int index) {

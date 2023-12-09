@@ -20,6 +20,7 @@ class SubjectService extends GetxService {
               "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
           videos: [
             VdoDetail(
+              category: [],
               videoTitle:
                   '"เฮี้ยน" | คุณแก๊ป | 5 ก.พ. 17 | THE GHOST RADIO | เล่าเรื่องผีเดอะโกส',
               channelName: "The ghost",
@@ -32,6 +33,7 @@ class SubjectService extends GetxService {
               updatedAt: '',
             ),
             VdoDetail(
+              category: [],
               videoTitle:
                   'ห้องสนิม | คุณแป้ง | 6 ม.ค. 61 | ***น่ากลัวมากของปี 2561 THE GHOST RADIO | ฟังเรื่องผีเดอะโกส',
               channelName: "The ghost",
@@ -44,7 +46,6 @@ class SubjectService extends GetxService {
               updatedAt: '',
             ),
           ],
-          categoryId: 1,
           createdAt: '',
           updatedAt: '')
       .obs;
@@ -63,6 +64,8 @@ class SubjectService extends GetxService {
             "https://youtube.com/playlist?list=PLESnSmimWaOyrrEncqo3tQZXWvu-13UwF&si=8Yz-rjkucAHVzRtN",
         videos: [
           VdoDetail(
+          category: [],
+
             videoTitle:
                 '"เฮี้ยน" | คุณแก๊ป | 5 ก.พ. 17 | THE GHOST RADIO | เล่าเรื่องผีเดอะโกส',
             channelName: "The ghost",
@@ -75,6 +78,8 @@ class SubjectService extends GetxService {
             updatedAt: '',
           ),
           VdoDetail(
+          category: [],
+
             videoTitle:
                 'ห้องสนิม | คุณแป้ง | 6 ม.ค. 61 | ***น่ากลัวมากของปี 2561 THE GHOST RADIO | ฟังเรื่องผีเดอะโกส',
             channelName: "The ghost",
@@ -87,7 +92,6 @@ class SubjectService extends GetxService {
             updatedAt: '',
           ),
         ],
-        categoryId: 1,
         createdAt: '',
         updatedAt: ''),
   ]).obs();

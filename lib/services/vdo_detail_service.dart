@@ -11,17 +11,11 @@ class VdoDetailService extends GetxService {
       subjectName: "",
       description: "",
       playlistLink: "",
-      // category: Category(
-      //     categoryId: 1,
-      //     categoryName: "",
-      //     createdAt: '',
-      //     updatedAt: '',
-      //     categoryImage: ''),
-      categoryId: 1,
       createdAt: '',
       updatedAt: '',
       videos: []).obs;
   Rx<VdoDetail> currentDetail = VdoDetail(
+          category: [],
           videoId: 1,
           subjectId: 1,
           videoTitle: "",
