@@ -1,6 +1,7 @@
 //bookmark service
 import 'package:ez_mooc/app/data/model/bookMark_model.dart';
 import 'package:ez_mooc/app/data/repositories/bookmark_repository.dart';
+import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
 
 class BookmarksService extends GetxService {
@@ -27,6 +28,30 @@ class BookmarksService extends GetxService {
       print('Bookmarks: ${this.bookmarks.value}');
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> createBookmark(BookMark bookMark) async {
+    try {
+      final bookmark = await bookmarkRepository.insert(bookMark);
+      // Additional logic if needed
+      fetchBookmarksByUserId(
+          Get.find<UserService>().currentUser.value.user_id!);
+    } catch (e) {
+      // Handle errors or propagate them
+      rethrow;
+    }
+  }
+
+  Future<void> deleteBookmark(BookMark bookMark) async {
+    try {
+      await bookmarkRepository.delete(bookMark);
+      fetchBookmarksByUserId(
+          Get.find<UserService>().currentUser.value.user_id!);
+      // Additional logic if needed
+    } catch (e) {
+      // Handle errors or propagate them
+      rethrow;
     }
   }
 }
