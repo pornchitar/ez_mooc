@@ -1,3 +1,4 @@
+import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/user_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 
@@ -14,9 +15,9 @@ class Favorites {
 
   factory Favorites.fromJson(Map<String, dynamic> json) {
     return Favorites(
-      id: json['id'],
-      user: User.fromJson(json['user']),
-      vdoDetail: VdoDetail.fromJson(json['vdo_detail']),
+      id: json['id'] ?? 0,
+      user: User.fromJson(json['user'] ?? {}),
+      vdoDetail: VdoDetail.fromJson(json['video'] ?? {}),
     );
   }
 

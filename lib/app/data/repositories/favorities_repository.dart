@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:ez_mooc/app/data/model/bookMark_model.dart';
-import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/model/favorities_model.dart';
 import 'package:ez_mooc/app/data/repositories/repository.dart';
 import 'package:http/http.dart' as http;
@@ -39,17 +37,20 @@ class FavoritesRepository extends IRepository<Favorites> {
   }
 
   //get Favorites by user id
-  Future<List<Favorites>> getBookMarkByUserId(int userId) async {
+  Future<List<Favorites>> getFavoritesByUserId(int userId) async {
     try {
-      var response = await http.get(Uri.parse('$url/Favorites/$userId'));
-      print('$url/Favorites/$userId');
+      var response = await http.get(Uri.parse('$url/favorites/user/$userId'));
+      print('$url/favorites/user/$userId');
 
       if (response.statusCode == 200) {
         var decodedResponse = json.decode(response.body);
+
         List<dynamic> subjectsJson = decodedResponse['data'];
+
         List<Favorites> favorites = subjectsJson
             .map((subjectJson) => Favorites.fromJson(subjectJson))
             .toList();
+
         return favorites;
       } else {
         print('Failed to load Favorites - Status code: ${response.statusCode}');

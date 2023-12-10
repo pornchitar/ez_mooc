@@ -26,17 +26,20 @@ class VdoDetail {
 
   factory VdoDetail.fromJson(Map<String, dynamic> json) {
     return VdoDetail(
-        videoId: json['VideoID'] ?? 0,
-        subjectId: json['SubjectID'] ?? 0,
-        videoTitle: json['VideoTitle'] ?? '',
-        videoURL: json['VideoURL'] ?? '',
-        thumbnail: json['Thumbnail'] ?? '',
-        channelName: json['ChannelName'] ?? '',
-        videoCode: json['VideoCode'] ?? '',
-        createdAt: json['created_at'] ?? '',
-        updatedAt: json['updated_at'] ?? '',
-        category: List<Category>.from(
-            json['categories'].map((x) => Category.fromJson(x))));
+      videoId: json['VideoID'] ?? 0,
+      subjectId: json['SubjectID'] ?? 0,
+      videoTitle: json['VideoTitle'] ?? '',
+      videoURL: json['VideoURL'] ?? '',
+      thumbnail: json['Thumbnail'] ?? '',
+      channelName: json['ChannelName'] ?? '',
+      videoCode: json['VideoCode'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+      category: (json['category'] as List<dynamic>?)
+              ?.map((categoryJson) => Category.fromJson(categoryJson))
+              .toList() ??
+          [],
+    );
   }
   //to json
   Map<String, dynamic> toJson() => {

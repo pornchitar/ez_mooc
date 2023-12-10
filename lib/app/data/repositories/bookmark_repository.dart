@@ -5,7 +5,7 @@ import 'package:ez_mooc/app/data/model/category_model.dart';
 import 'package:ez_mooc/app/data/repositories/repository.dart';
 import 'package:http/http.dart' as http;
 
-class BookMarkRepository extends IRepository<BookMark> {
+class BookmarkRepository extends IRepository<BookMark> {
   final url = 'http://10.0.2.2:8000/api';
 
   @override
@@ -40,8 +40,8 @@ class BookMarkRepository extends IRepository<BookMark> {
   //get bookmark by user id
   Future<List<BookMark>> getBookMarkByUserId(int userId) async {
     try {
-      var response = await http.get(Uri.parse('$url/bookmarks/$userId'));
-      print('$url/bookmarks/$userId');
+      var response = await http.get(Uri.parse('$url/bookmarks/user/$userId'));
+      print('$url/bookmarks/user/$userId');
 
       if (response.statusCode == 200) {
         var decodedResponse = json.decode(response.body);
