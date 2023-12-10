@@ -8,9 +8,32 @@ class FavoritesRepository extends IRepository<Favorites> {
   final url = 'http://10.0.2.2:8000/api';
 
   @override
-  Future<void> delete(Favorites t) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> delete(Favorites t) async {
+    final response = await http.delete(
+      Uri.parse('$url/Favorites/${t.id}'), // replace with your actual endpoint
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete Favorites');
+    }
+  }
+
+  @override
+  Future<void> insert(Favorites t) async {
+    final response = await http.post(
+      Uri.parse('$url/Favorites'), // replace with your actual endpoint
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+          {'user_id': t.user.user_id, 'video_id': t.vdoDetail.videoId}),
+    );
+
+    if (response.statusCode == 201) {
+      print('Favorites created successfully!');
+      // return Favorites.fromJson(jsonDecode(response.body)['data']);
+    } else {
+      throw Exception('Failed to create Favorites');
+    }
   }
 
   @override
@@ -21,12 +44,6 @@ class FavoritesRepository extends IRepository<Favorites> {
   @override
   Future<Favorites?> getOne(int id) {
     // TODO: implement getOne
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> insert(Favorites t) {
-    // TODO: implement insert
     throw UnimplementedError();
   }
 
