@@ -7,7 +7,10 @@ class FavoritesService extends GetxService {
   final favoritesRepository = FavoritesRepository();
   RxList<Favorites> favorites = RxList<Favorites>.of([]).obs();
   //get
-  List get getFavorites => favorites.value;
+  List<Favorites> getFavorites() {
+    return this.favorites.value;
+  }
+
   //set
   void setFavorites(List<Favorites> favorites) {
     this.favorites.clear();

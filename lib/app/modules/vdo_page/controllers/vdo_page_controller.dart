@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:ez_mooc/app/data/model/bookMark_model.dart';
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
+import 'package:ez_mooc/app/data/model/favorities_model.dart';
 import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/services/bookmark_service.dart';
+import 'package:ez_mooc/services/favorites_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:get/get.dart';
@@ -15,8 +19,11 @@ class VdoPageController extends GetxController {
   late YoutubePlayerController youtubePlayerController;
   RxDouble percentageWatched = 0.0.obs;
   Timer? saveTimer;
+  RxBool isBookmarked = false.obs;
+  RxBool isLiked = false.obs;
   var isPlayerReady = false.obs;
-
+  final bookmarksService = Get.find<BookmarksService>();
+  final likesService = Get.find<FavoritesService>();
   @override
   void onInit() {
     super.onInit();
@@ -185,5 +192,29 @@ class VdoPageController extends GetxController {
 
   void updateEnrollmentView() {
     update(); // This will force the rebuild of the widget
+  }
+
+  void toggleBookmark() {
+    isBookmarked.value = !isBookmarked.value;
+  }
+
+  void toggleLike() {
+    isLiked.value = !isLiked.value;
+  }
+
+  bool isVideoBookmarked() {
+    VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
+
+    return bookmarksService
+        .getBookmarks()
+        .any((bookmark) => bookmark.vdoDetail.videoId == currentVdo.videoId);
+  }
+
+  bool isVideoLiked() {
+    VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
+
+    return likesService
+        .getFavorites()
+        .any((favorite) => favorite.vdoDetail.videoId == currentVdo.videoId);
   }
 }

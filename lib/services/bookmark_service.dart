@@ -8,7 +8,10 @@ class BookmarksService extends GetxService {
   RxList<BookMark> bookmarks = RxList<BookMark>.of([]).obs();
 
   //get bookmarks
-  List get getBookmarks => bookmarks.value;
+  List<BookMark> getBookmarks() {
+    return this.bookmarks.value;
+  }
+
   //set bookmarks
   void setBookmarks(List<BookMark> bookmarks) {
     this.bookmarks.clear();
