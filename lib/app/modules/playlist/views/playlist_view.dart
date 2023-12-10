@@ -65,74 +65,82 @@ class _PlaylistViewState extends State<PlaylistView> {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
-        children: [
-          VdoPageView(),
-          SizedBox(height: 10.0),
-          Expanded(
-            // Add an Expanded widget
-            child: FutureBuilder(
-              key: Key(Get.find<EnrollmentService>().getCurrentVdo()),
-              future: fetchAllVideoData(Get.find<VdoDetailService>()
-                  .currentSubject
-                  .value
-                  .videos
-                  .toList()),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData ||
-                    (snapshot.data as List).isEmpty) {
-                  return Center(child: Text('No videos available.'));
-                } else {
-                  List<yt.Video> videos = snapshot.data as List<yt.Video>;
+      body: SafeArea(
+        child: Column(
+          children: [
+            Flexible(
+              child: VdoPageView(),
+              flex: 2,
+            ),
+            SizedBox(height: 10.0),
+            Flexible(
+              flex: 3,
+              child: Expanded(
+                // Add an Expanded widget
+                child: FutureBuilder(
+                  key: Key(Get.find<EnrollmentService>().getCurrentVdo()),
+                  future: fetchAllVideoData(Get.find<VdoDetailService>()
+                      .currentSubject
+                      .value
+                      .videos
+                      .toList()),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData ||
+                        (snapshot.data as List).isEmpty) {
+                      return Center(child: Text('No videos available.'));
+                    } else {
+                      List<yt.Video> videos = snapshot.data as List<yt.Video>;
 
-                  return ListView.builder(
-                    itemCount: videos.length,
-                    itemBuilder: (context, index) {
-                      var video = videos[index];
-                      var thumbnailUrl = video.thumbnails.highResUrl ?? '';
+                      return ListView.builder(
+                        itemCount: videos.length,
+                        itemBuilder: (context, index) {
+                          var video = videos[index];
+                          var thumbnailUrl = video.thumbnails.highResUrl ?? '';
 
-                      return ListTile(
-                        leading: Image.network(thumbnailUrl),
-                        title: Text(video.title),
-                        subtitle: Text(video.author),
-                        onTap: () {
-                          Get.find<EnrollmentService>().currentVdoId.value =
-                              Get.find<VdoDetailService>()
-                                  .currentSubject
-                                  .value
-                                  .videos[index]
-                                  .videoId;
-                          print(
-                              "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
-                          Get.find<VdoDetailService>().setCurrentVdo(
-                              Get.find<VdoDetailService>()
-                                  .currentSubject
-                                  .value
-                                  .videos
-                                  .toList()[index]);
-                          Get.find<VdoPageController>().loadVideo(
-                              Get.find<VdoDetailService>()
-                                  .currentSubject
-                                  .value
-                                  .videos
-                                  .toList()[index]
-                                  .videoCode);
+                          return ListTile(
+                            leading: Image.network(thumbnailUrl),
+                            title: Text(video.title),
+                            subtitle: Text(video.author),
+                            onTap: () {
+                              Get.find<EnrollmentService>().currentVdoId.value =
+                                  Get.find<VdoDetailService>()
+                                      .currentSubject
+                                      .value
+                                      .videos[index]
+                                      .videoId;
+                              print(
+                                  "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
+                              Get.find<VdoDetailService>().setCurrentVdo(
+                                  Get.find<VdoDetailService>()
+                                      .currentSubject
+                                      .value
+                                      .videos
+                                      .toList()[index]);
+                              Get.find<VdoPageController>().loadVideo(
+                                  Get.find<VdoDetailService>()
+                                      .currentSubject
+                                      .value
+                                      .videos
+                                      .toList()[index]
+                                      .videoCode);
 
-                          print(
-                              "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
+                              print(
+                                  "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
+                            },
+                          );
                         },
                       );
-                    },
-                  );
-                }
-              },
+                    }
+                  },
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
