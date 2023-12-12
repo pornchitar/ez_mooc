@@ -25,7 +25,7 @@ class BookmarksService extends GetxService {
       List<BookMark> bookmarks =
           await bookmarkRepository.getBookMarkByUserId(userId);
       this.bookmarks.value = bookmarks;
-      print('Bookmarks: ${this.bookmarks.value}');
+      print('Bookmarks: ${this.bookmarks.toList().map((e) => e.toJson())}');
     } catch (e) {
       print(e);
     }
@@ -34,7 +34,6 @@ class BookmarksService extends GetxService {
   Future<void> createBookmark(BookMark bookMark) async {
     try {
       final bookmark = await bookmarkRepository.insert(bookMark);
-      // Additional logic if needed
       fetchBookmarksByUserId(
           Get.find<UserService>().currentUser.value.user_id!);
     } catch (e) {

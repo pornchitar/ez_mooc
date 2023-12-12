@@ -24,21 +24,22 @@ class FavoritesService extends GetxService {
       List<Favorites> favorites =
           await favoritesRepository.getFavoritesByUserId(userId);
       this.favorites.value = favorites;
-      print('Favorites: ${this.favorites.value}');
+      print('Favorites: ${this.favorites.toList().map((e) => e.toJson())}');
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> createBookmark(Favorites favorites) async {
+  Future<void> createFavorites(Favorites favorites) async {
     try {
-      final bookmark = await favoritesRepository.insert(favorites);
-      // Additional logic if needed
-      fetchFavoritesByUserId(
+      // print('Favorites before insertion: ${favorites.toJson()}');
+      await favoritesRepository.insert(favorites);
+      await fetchFavoritesByUserId(
           Get.find<UserService>().currentUser.value.user_id!);
+
+      // Additional logic if needed
     } catch (e) {
-      // Handle errors or propagate them
-      rethrow;
+      print('Error insert Favorites: $e');
     }
   }
 
@@ -49,6 +50,7 @@ class FavoritesService extends GetxService {
           Get.find<UserService>().currentUser.value.user_id!);
       // Additional logic if needed
     } catch (e) {
+      print('Error delete Favorites: $e');
       // Handle errors or propagate them
       rethrow;
     }

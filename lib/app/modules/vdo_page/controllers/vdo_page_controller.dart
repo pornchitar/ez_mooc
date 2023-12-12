@@ -9,6 +9,7 @@ import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/services/bookmark_service.dart';
 import 'package:ez_mooc/services/favorites_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
+import 'package:ez_mooc/services/user_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -27,6 +28,8 @@ class VdoPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Get.find<FavoritesService>().getFavorites();
+    Get.find<BookmarksService>().getBookmarks();
     initializeYoutubePlayer();
     print("VdoPageController initialized");
     print(Get.find<VdoDetailService>().getCurrentVdo().videoId);
@@ -194,16 +197,54 @@ class VdoPageController extends GetxController {
     update(); // This will force the rebuild of the widget
   }
 
-  void toggleBookmark() {
+  Future<void> toggleBookmark() async {
+    VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
+
+    if (isBookmarked.value == false) {
+      BookMark bookMark = BookMark(
+        user: Get.find<UserService>().getCurrentUser(),
+        vdoDetail: currentVdo,
+        id: -1,
+      );
+      await bookmarksService.createBookmark(bookMark);
+    } else {
+      BookMark bookMark = bookmarksService.getBookmarks().firstWhere(
+            (bookmark) => bookmark.vdoDetail.videoId == currentVdo.videoId,
+            orElse: () => BookMark(
+                user: Get.find<UserService>().getCurrentUser(),
+                vdoDetail: currentVdo,
+                id: 1), // Replace with appropriate default values
+          );
+      await bookmarksService.deleteBookmark(bookMark);
+    }
     isBookmarked.value = !isBookmarked.value;
   }
 
-  void toggleLike() {
-    isLiked.value = !isLiked.value;
+  Future<void> toggleLike() async {
+    if (isLiked.value == false) {
+      Favorites favorite = Favorites(
+        id: 0,
+        user: Get.find<UserService>().getCurrentUser(),
+        vdoDetail: Get.find<VdoDetailService>().getCurrentVdo(),
+      );
+      await likesService.createFavorites(favorite);
+      print("===============create favorite =====================");
+    } else {
+      Favorites favorite = likesService.getFavorites().firstWhere(
+            (favorite) =>
+                favorite.vdoDetail.videoId ==
+                Get.find<VdoDetailService>().getCurrentVdo().videoId,
+          );
+      print("===============delete favorite =====================");
+      await likesService.deleteBookmark(
+          favorite); // Potential typo: deleteBookmark should be deleteFavorite
+    }
   }
 
   bool isVideoBookmarked() {
     VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
+    print(
+        "===================currentVdo ${bookmarksService.getBookmarks().length}=========================");
 
     return bookmarksService
         .getBookmarks()

@@ -14,9 +14,9 @@ class BookMark {
 
   factory BookMark.fromJson(Map<String, dynamic> json) {
     return BookMark(
-      id: json['id'],
-      user: User.fromJson(json['user']),
-      vdoDetail: VdoDetail.fromJson(json['vdo_detail']),
+      id: json['id'] ?? 0,
+      user: User.fromJson(json['user'] ?? {}),
+      vdoDetail: VdoDetail.fromJson(json['video'] ?? {}),
     );
   }
 

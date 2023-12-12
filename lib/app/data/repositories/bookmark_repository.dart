@@ -33,17 +33,21 @@ class BookmarkRepository extends IRepository<BookMark> {
 
   @override
   Future<void> insert(BookMark t) async {
-    final response = await http.post(
-      Uri.parse('$url/bookmark'), // replace with your actual endpoint
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(
-          {'user_id': t.user.user_id, 'video_id': t.vdoDetail.videoId}),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$url/bookmark'), // replace with your actual endpoint
+        body: jsonEncode(
+            {'UserID': t.user.user_id, 'VideoID': t.vdoDetail.videoId}),
+      );
 
-    if (response.statusCode == 201) {
-      print('Bookmark created successfully!');
-      // return BookMark.fromJson(jsonDecode(response.body)['data']);
-    } else {
+      if (response.statusCode == 201) {
+        print('Bookmark created successfully!');
+        // return BookMark.fromJson(jsonDecode(response.body)['data']);
+      } else {
+        throw Exception('Failed to create bookmark');
+      }
+    } catch (e) {
+      print('Error insert bookmark: $e');
       throw Exception('Failed to create bookmark');
     }
   }
@@ -57,8 +61,8 @@ class BookmarkRepository extends IRepository<BookMark> {
   //get bookmark by user id
   Future<List<BookMark>> getBookMarkByUserId(int userId) async {
     try {
-      var response = await http.get(Uri.parse('$url/bookmarks/user/$userId'));
-      print('$url/bookmarks/user/$userId');
+      var response = await http.get(Uri.parse('$url/bookmark/user/$userId'));
+      print('$url/bookmark/user/$userId');
 
       if (response.statusCode == 200) {
         var decodedResponse = json.decode(response.body);

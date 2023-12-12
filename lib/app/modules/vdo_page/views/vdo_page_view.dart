@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -53,6 +55,7 @@ class VdoPageView extends GetView<VdoPageController> {
                   onPressed: () {
                     // Toggle like state
                     controller.toggleLike();
+                    controller.isLiked.value = !controller.isLiked.value;
                   },
                 );
               }),

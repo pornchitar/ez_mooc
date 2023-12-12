@@ -127,7 +127,7 @@ class EnrollmentService extends GetxService {
       });
 
       enrollments.value = fetchedEnrollments;
-      print("Enrollments fetched: ${enrollments.toJson()}");
+      // print("Enrollments fetched: ${enrollments.toJson()}");
       return fetchedEnrollments;
     } catch (e) {
       print(e);
@@ -141,7 +141,7 @@ class EnrollmentService extends GetxService {
       List<ProgressEnrollment> fetchedProgress =
           await progessEnrollmentRepository.getProgressByUserId(
               Get.find<UserService>().getCurrentUser().user_id);
-      print("Enrollments fetched: ${enrollments.toJson()}");
+      // print("Enrollments fetched: ${enrollments.toJson()}");
     } catch (e) {
       print(e);
     }
