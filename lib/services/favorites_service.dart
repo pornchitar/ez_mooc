@@ -43,7 +43,7 @@ class FavoritesService extends GetxService {
     }
   }
 
-  Future<void> deleteBookmark(Favorites favorites) async {
+  Future<void> deleteFavorites(Favorites favorites) async {
     try {
       await favoritesRepository.delete(favorites);
       fetchFavoritesByUserId(

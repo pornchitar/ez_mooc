@@ -47,7 +47,6 @@ class BookmarksService extends GetxService {
       await bookmarkRepository.delete(bookMark);
       fetchBookmarksByUserId(
           Get.find<UserService>().currentUser.value.user_id!);
-      // Additional logic if needed
     } catch (e) {
       // Handle errors or propagate them
       rethrow;

@@ -53,7 +53,8 @@ class VdoPageController extends GetxController {
       handleVideoEnd();
     } else if (playerState == PlayerState.playing) {
       Duration currentPosition = youtubePlayerController.value.position;
-      if (currentPosition.inSeconds % 60 == 0) {
+      if (currentPosition.inSeconds % 60 == 0 &&
+          currentPosition.inSeconds != 0) {
         // Save percentage every 60 seconds (1 minute)
         double percentage = calculatePercentageWatched(youtubePlayerController);
 
@@ -193,31 +194,25 @@ class VdoPageController extends GetxController {
     }
   }
 
-  void updateEnrollmentView() {
-    update(); // This will force the rebuild of the widget
-  }
-
   Future<void> toggleBookmark() async {
-    VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
-
     if (isBookmarked.value == false) {
-      BookMark bookMark = BookMark(
+      BookMark bookmark = BookMark(
+        id: 0,
         user: Get.find<UserService>().getCurrentUser(),
-        vdoDetail: currentVdo,
-        id: -1,
+        vdoDetail: Get.find<VdoDetailService>().getCurrentVdo(),
       );
-      await bookmarksService.createBookmark(bookMark);
+      await bookmarksService.createBookmark(bookmark);
+      print("===============create favorite =====================");
     } else {
-      BookMark bookMark = bookmarksService.getBookmarks().firstWhere(
-            (bookmark) => bookmark.vdoDetail.videoId == currentVdo.videoId,
-            orElse: () => BookMark(
-                user: Get.find<UserService>().getCurrentUser(),
-                vdoDetail: currentVdo,
-                id: 1), // Replace with appropriate default values
+      BookMark bookmark = bookmarksService.getBookmarks().firstWhere(
+            (bookmark) =>
+                bookmark.vdoDetail.videoId ==
+                Get.find<VdoDetailService>().getCurrentVdo().videoId,
           );
-      await bookmarksService.deleteBookmark(bookMark);
+      print("===============delete favorite =====================");
+      await bookmarksService.deleteBookmark(
+          bookmark); // Potential typo: deleteBookmark should be deleteFavorite
     }
-    isBookmarked.value = !isBookmarked.value;
   }
 
   Future<void> toggleLike() async {
@@ -236,7 +231,7 @@ class VdoPageController extends GetxController {
                 Get.find<VdoDetailService>().getCurrentVdo().videoId,
           );
       print("===============delete favorite =====================");
-      await likesService.deleteBookmark(
+      await likesService.deleteFavorites(
           favorite); // Potential typo: deleteBookmark should be deleteFavorite
     }
   }

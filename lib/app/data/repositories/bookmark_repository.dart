@@ -16,7 +16,10 @@ class BookmarkRepository extends IRepository<BookMark> {
     );
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to delete bookmark');
+      throw Exception('Failed to delete Favorites');
+    }
+    if (response.statusCode == 200) {
+      print('Favorites deleted successfully! Response: ${response.body}');
     }
   }
 
@@ -35,20 +38,52 @@ class BookmarkRepository extends IRepository<BookMark> {
   Future<void> insert(BookMark t) async {
     try {
       final response = await http.post(
-        Uri.parse('$url/bookmark'), // replace with your actual endpoint
-        body: jsonEncode(
-            {'UserID': t.user.user_id, 'VideoID': t.vdoDetail.videoId}),
+        Uri.parse(
+            '$url/bookmark'), // Assuming the endpoint is different for bookmarks
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'UserID': t.user.user_id,
+          'VideoID': t.vdoDetail.videoId,
+        }),
       );
 
+      print('${response.statusCode}');
       if (response.statusCode == 201) {
-        print('Bookmark created successfully!');
-        // return BookMark.fromJson(jsonDecode(response.body)['data']);
+        // Parse the response body
+        final Map<String, dynamic> responseData = json.decode(response.body);
+
+        // Check if the 'data' key exists in the response
+        if (responseData.containsKey('data')) {
+          // Access the 'data' list from the response
+          final List<dynamic> dataList = responseData['data'];
+
+          // Check if the 'data' list is not empty
+          if (dataList.isNotEmpty) {
+            // Access the first element in the 'data' list
+            final Map<String, dynamic> bookmarkData = dataList[0];
+
+            // Access the 'id' field from the bookmark data
+            final int bookmarkId = bookmarkData['id'];
+
+            print('Bookmark created successfully! Response: ${response.body}');
+            print('Bookmark ID: $bookmarkId');
+          } else {
+            // Handle the case where 'data' list is empty
+            throw Exception('No data in the response');
+          }
+        } else {
+          // Handle the case where 'data' key is not present in the response
+          throw Exception('Invalid response format');
+        }
       } else {
-        throw Exception('Failed to create bookmark');
+        throw Exception('Failed to create Bookmark');
       }
     } catch (e) {
-      print('Error insert bookmark: $e');
-      throw Exception('Failed to create bookmark');
+      print('Error insert Bookmark: $e');
+      throw Exception('Failed to create Bookmark');
     }
   }
 

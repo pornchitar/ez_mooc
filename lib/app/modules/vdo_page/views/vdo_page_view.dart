@@ -75,6 +75,8 @@ class VdoPageView extends GetView<VdoPageController> {
                   onPressed: () {
                     // Toggle bookmark state
                     controller.toggleBookmark();
+                    controller.isBookmarked.value =
+                        !controller.isBookmarked.value;
                   },
                 );
               }),
