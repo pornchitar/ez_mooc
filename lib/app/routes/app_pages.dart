@@ -62,7 +62,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LIKE_VDO,
-      page: () => const LikeVdoView(),
+      page: () => LikeVdoView(),
       binding: LikeVdoBinding(),
     ),
   ];
