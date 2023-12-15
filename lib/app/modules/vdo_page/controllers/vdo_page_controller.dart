@@ -1,10 +1,15 @@
 import 'dart:async';
 
+import 'package:ez_mooc/app/data/model/bookMark_model.dart';
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
+import 'package:ez_mooc/app/data/model/favorities_model.dart';
 import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/services/bookmark_service.dart';
+import 'package:ez_mooc/services/favorites_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
+import 'package:ez_mooc/services/user_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -15,17 +20,25 @@ class VdoPageController extends GetxController {
   late YoutubePlayerController youtubePlayerController;
   RxDouble percentageWatched = 0.0.obs;
   Timer? saveTimer;
+  RxBool isBookmarked = false.obs;
+  RxBool isLiked = false.obs;
   var isPlayerReady = false.obs;
-
+  final bookmarksService = Get.find<BookmarksService>();
+  final likesService = Get.find<FavoritesService>();
   @override
   void onInit() {
     super.onInit();
+    Get.find<FavoritesService>().getFavorites();
+    Get.find<BookmarksService>().getBookmarks();
     initializeYoutubePlayer();
+    print("VdoPageController initialized");
+    print(Get.find<VdoDetailService>().getCurrentVdo().videoId);
   }
 
   void initializeYoutubePlayer() {
+    print(Get.find<VdoDetailService>().getCurrentVdo().videoCode);
     youtubePlayerController = YoutubePlayerController(
-      initialVideoId: Get.find<VdoDetailService>().getCurrentVdo().videoId,
+      initialVideoId: Get.find<VdoDetailService>().getCurrentVdo().videoCode,
       flags: YoutubePlayerFlags(autoPlay: true, mute: false),
     )..addListener(listener);
   }
@@ -34,11 +47,23 @@ class VdoPageController extends GetxController {
     var playerState = youtubePlayerController.value.playerState;
     if (playerState == PlayerState.ended) {
       print("Video ended");
+      // print all enrollments to toJson
+      print(Get.find<EnrollmentService>().enrollments.toJson());
+
       handleVideoEnd();
     } else if (playerState == PlayerState.playing) {
-      managePeriodicUpdate();
+      Duration currentPosition = youtubePlayerController.value.position;
+      if (currentPosition.inSeconds % 60 == 0 &&
+          currentPosition.inSeconds != 0) {
+        // Save percentage every 60 seconds (1 minute)
+        double percentage = calculatePercentageWatched(youtubePlayerController);
+
+        savePercentageWatched(percentage);
+      }
     } else if (playerState == PlayerState.paused) {
-      savePercentageWatched(percentageWatched.value);
+      print(Get.find<EnrollmentService>().enrollments.toJson());
+      double percentage = calculatePercentageWatched(youtubePlayerController);
+      savePercentageWatched(percentage);
     }
 
     // Update observable variable for player readiness
@@ -47,16 +72,17 @@ class VdoPageController extends GetxController {
     }
   }
 
+  @override
   void onClose() {
     youtubePlayerController.removeListener(listener);
     youtubePlayerController.dispose();
-    super.onClose();
+    saveTimer?.cancel();
   }
 
-  void loadVideo(String videoId) {
+  void loadVideo(String videoCode) {
     try {
       // Instead of creating a new controller, update the existing one
-      youtubePlayerController.load(videoId);
+      youtubePlayerController.load(videoCode);
       youtubePlayerController
           .play(); // You may need to add this line if it's not playing automatically
     } catch (e) {
@@ -67,7 +93,7 @@ class VdoPageController extends GetxController {
   void handleVideoEnd() {
     int currentIndex = getIndexOfCurrentVideo();
     int totalVideos =
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail.length;
+        Get.find<VdoDetailService>().currentSubject.value.videos.length;
     savePercentageWatched(100); // Save 100% when the video ends
 
     print(
@@ -81,24 +107,16 @@ class VdoPageController extends GetxController {
     }
   }
 
-  void managePeriodicUpdate() {
-    saveTimer?.cancel(); // Cancel previous timer
-    saveTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      double percentage = calculatePercentageWatched(youtubePlayerController);
-      savePercentageWatched(percentage);
-    });
-  }
-
   void playNextVideo(int index) {
     Get.find<VdoDetailService>().setCurrentVdo(
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail[index]);
+        Get.find<VdoDetailService>().currentSubject.value.videos[index]);
     Get.find<EnrollmentService>().currentVdoId.value =
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail[index].id;
+        Get.find<VdoDetailService>().currentSubject.value.videos[index].videoId;
     loadVideo(Get.find<VdoDetailService>()
         .currentSubject
         .value
-        .vdoDetail[index]
-        .videoId);
+        .videos[index]
+        .videoCode);
   }
 
   void disposeController() {
@@ -116,10 +134,9 @@ class VdoPageController extends GetxController {
   }
 
   int getIndexOfCurrentVideo() {
-    String currentVideoId =
-        Get.find<VdoDetailService>().getCurrentVdo().videoId;
+    int currentVideoId = Get.find<VdoDetailService>().getCurrentVdo().videoId;
     List<VdoDetail> playlist =
-        Get.find<VdoDetailService>().currentSubject.value.vdoDetail;
+        Get.find<VdoDetailService>().currentSubject.value.videos;
 
     return playlist.indexWhere((video) => video.videoId == currentVideoId);
   }
@@ -130,7 +147,7 @@ class VdoPageController extends GetxController {
         100;
   }
 
-  void savePercentageWatched(double percentage) {
+  Future<void> savePercentageWatched(double percentage) async {
     EnrollmentService enrollmentService = Get.find<EnrollmentService>();
     VdoDetailService vdoDetailService = Get.find<VdoDetailService>();
 
@@ -143,22 +160,23 @@ class VdoPageController extends GetxController {
         "-------------------Enrollment not found for video ID: $currentVideoId -------------",
       ),
     );
-
+    print("currentEnrollment ${currentEnrollment.toJson()}");
     for (var element in currentEnrollment.progress) {
+      print("element.videoId ${element.videoId}");
+      print("currentVideoId ${currentVideoId}");
+
       if (element.videoId == currentVideoId) {
         var videoProgress = currentEnrollment.progress
             .firstWhere((element) => element.videoId == currentVideoId);
-        videoProgress.progressPercentage = percentage;
-        videoProgress.lastViewedTimestamp = DateTime.now();
+        element.progressPercentage = percentage.toInt();
+        element.lastViewedTimestamp = DateTime.now();
+        List<Enrollment> enroollList =
+            await enrollmentService.updatePersentageProgress(element);
+        print(enroollList.toString());
+
         break;
       }
     }
-
-    // Update the enrollment progress list
-    enrollmentService.enrollments
-        .firstWhere(
-            (enrollment) => enrollment.subjectId == currentSub.subjectId)
-        .progress = List.from(currentEnrollment.progress);
   }
 
   String extractYouTubeVideoId(String videoUrl) {
@@ -176,7 +194,63 @@ class VdoPageController extends GetxController {
     }
   }
 
-  void updateEnrollmentView() {
-    update(); // This will force the rebuild of the widget
+  Future<void> toggleBookmark() async {
+    if (isBookmarked.value == false) {
+      BookMark bookmark = BookMark(
+        id: 0,
+        user: Get.find<UserService>().getCurrentUser(),
+        vdoDetail: Get.find<VdoDetailService>().getCurrentVdo(),
+      );
+      await bookmarksService.createBookmark(bookmark);
+      print("===============create favorite =====================");
+    } else {
+      BookMark bookmark = bookmarksService.getBookmarks().firstWhere(
+            (bookmark) =>
+                bookmark.vdoDetail.videoId ==
+                Get.find<VdoDetailService>().getCurrentVdo().videoId,
+          );
+      print("===============delete favorite =====================");
+      await bookmarksService.deleteBookmark(
+          bookmark); // Potential typo: deleteBookmark should be deleteFavorite
+    }
+  }
+
+  Future<void> toggleLike() async {
+    if (isLiked.value == false) {
+      Favorites favorite = Favorites(
+        id: 0,
+        user: Get.find<UserService>().getCurrentUser(),
+        vdoDetail: Get.find<VdoDetailService>().getCurrentVdo(),
+      );
+      await likesService.createFavorites(favorite);
+      print("===============create favorite =====================");
+    } else {
+      Favorites favorite = likesService.getFavorites().firstWhere(
+            (favorite) =>
+                favorite.vdoDetail.videoId ==
+                Get.find<VdoDetailService>().getCurrentVdo().videoId,
+          );
+      print("===============delete favorite =====================");
+      await likesService.deleteFavorites(
+          favorite); // Potential typo: deleteBookmark should be deleteFavorite
+    }
+  }
+
+  bool isVideoBookmarked() {
+    VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
+    print(
+        "===================currentVdo ${bookmarksService.getBookmarks().length}=========================");
+
+    return bookmarksService
+        .getBookmarks()
+        .any((bookmark) => bookmark.vdoDetail.videoId == currentVdo.videoId);
+  }
+
+  bool isVideoLiked() {
+    VdoDetail currentVdo = Get.find<VdoDetailService>().getCurrentVdo();
+
+    return likesService
+        .getFavorites()
+        .any((favorite) => favorite.vdoDetail.videoId == currentVdo.videoId);
   }
 }

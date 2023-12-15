@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
 import 'package:ez_mooc/components/VideoCard.dart';
+import 'package:ez_mooc/services/category_service.dart';
 import 'package:ez_mooc/services/enrollment_service.dart';
 import 'package:ez_mooc/services/subject_service.dart';
 import 'package:ez_mooc/services/vdo_detail_service.dart';
@@ -22,108 +23,135 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: Color(0xff551E68),
         leading: Image.asset(
           'images/logo.png', // Replace with your logo asset
-          height: 75.0,
+          height: 80.0,
+        ),
+        title: Text(
+          'MOOC',
+          style: TextStyle(
+            fontSize: 30.0,
+            fontFamily: 'Kanit',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: Image.asset(
-              'images/search_icon.png', // Replace with your search icon asset
+              'images/find_icon.png', // Replace with your search icon asset
               height: 50.0,
             ),
           ),
         ],
       ),
-      body: Container(
-        color: Color(0xFFEDE4FF),
+      body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Category Section
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-              child: Text(
-                'หมวดหมู่',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: 'Kanit',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              height: 180.0,
-              padding: EdgeInsets.all(10.0),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _buildAllCardDetail('images/art_cat.png', 'อาหาร'),
-                  _buildAllCardDetail('images/art_cat.png', 'ธรรมมะ'),
-                  _buildAllCardDetail('images/art_cat.png', 'สุขภาพ'),
-                  _buildAllCardDetail('images/art_cat.png', 'เทคโนโลยี'),
-                  _buildAllCardDetail('images/art_cat.png', 'พัฒนาจิต'),
-
-                  // Add more category cards as needed
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text('แนะนำสำหรับคุณ',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontFamily: 'Kanit',
-                    fontWeight: FontWeight.bold,
-                  )),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: Get.find<SubjectService>().playlists.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    child: Obx(
-                      () => VideoCard(
-                        videoUrl: Get.find<SubjectService>()
-                            .playlists[index]
-                            .playlistLink,
+            Obx(
+              () => Container(
+                color: Color(0xFFEDE4FF),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category Section
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                      child: Text(
+                        'หมวดหมู่',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    onTap: () {
-                      for (var element in Get.find<SubjectService>()
-                          .playlists[index]
-                          .vdoDetail) {
-                        print(element.videoUrl);
-                      }
+                    Container(
+                      height: 180.0,
+                      padding: EdgeInsets.all(10.0),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          for (var element
+                              in Get.find<CategoryService>().categories)
+                            _buildAllCardDetail(
+                                element.categoryImage, element.categoryName)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        'แนะนำสำหรับคุณ',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontFamily: 'Kanit',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: Get.find<SubjectService>().playlists.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          child: VideoCard(
+                            videoUrl: Get.find<SubjectService>()
+                                .playlists[index]
+                                .playlistLink,
+                          ),
+                          onTap: () {
+                            for (var element in Get.find<SubjectService>()
+                                .playlists[index]
+                                .videos) {
+                              print(element.videoURL);
+                            }
+                            //set current playlist
+                            Get.find<SubjectService>().setCurrentPlaylist(
+                                Get.find<SubjectService>().playlists[index]);
+                            //ser vdoplaylist
+                            Get.find<VdoDetailService>().setVdoPlaylists(
+                              Get.find<SubjectService>()
+                                  .playlists[index]
+                                  .videos
+                                  .toList(),
+                            );
+                            //sert current subject
+                            Get.find<VdoDetailService>().currentSubject.value =
+                                Get.find<SubjectService>().playlists[index];
 
-                      Get.find<VdoDetailService>().setVdoPlaylists(
-                        Get.find<SubjectService>()
-                            .playlists[index]
-                            .vdoDetail
-                            .toList(),
-                      );
-                      Get.find<VdoDetailService>().currentSubject.value =
-                          Get.find<SubjectService>().playlists[index];
+                            Get.find<VdoDetailService>().setCurrentVdo(
+                                Get.find<VdoDetailService>()
+                                    .currentSubject
+                                    .value
+                                    .videos[0]);
 
-                      Get.find<VdoDetailService>().setCurrentVdo(
-                          Get.find<VdoDetailService>()
-                              .currentSubject
-                              .value
-                              .vdoDetail[0]);
+                            print(Get.find<VdoDetailService>()
+                                .getCurrentVdo()
+                                .videoId);
 
-                      Get.find<EnrollmentService>().addEnrollment(
-                          Get.find<SubjectService>().playlists[index]);
+                            Get.find<EnrollmentService>().addEnrollment(
+                                Get.find<SubjectService>().playlists[index]);
 
-                      Get.find<EnrollmentService>().setCurrentVdoId(
-                          Get.find<SubjectService>()
-                              .playlists[index]
-                              .vdoDetail[0]
-                              .id);
-                      Get.toNamed('/playlist');
-                    },
-                  );
-                },
+                            Get.find<VdoDetailService>().currentSubject =
+                                Get.find<SubjectService>().playlists[index].obs;
+                            Get.find<EnrollmentService>().currentVdoId =
+                                Get.find<SubjectService>()
+                                    .playlists[index]
+                                    .videos[0]
+                                    .videoId
+                                    .obs;
+                            print(
+                                'Current vdoId : ${Get.find<EnrollmentService>().currentVdoId.value}');
+                            Get.toNamed('/playlist');
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -179,7 +207,7 @@ Widget _buildCategoryCard(String imagePath) {
             color: backgroundColor.withOpacity(0.8),
           ),
           child: Center(
-            child: Image.asset(
+            child: Image.network(
               imagePath,
               height: 60.0,
             ),

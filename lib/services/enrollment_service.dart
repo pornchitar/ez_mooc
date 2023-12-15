@@ -1,10 +1,14 @@
 import 'package:ez_mooc/app/data/model/enrollment_model.dart';
 import 'package:ez_mooc/app/data/model/report_model.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
+import 'package:ez_mooc/app/data/repositories/enrollment_repository.dart';
+import 'package:ez_mooc/app/data/repositories/report_repository.dart';
 import 'package:ez_mooc/services/user_service.dart';
 import 'package:get/get.dart';
 
 class EnrollmentService extends GetxService {
+  final enrollmentRepository = EnrollmentRepository();
+  final progessEnrollmentRepository = ProgessRepository();
   RxList<Enrollment> enrollments = <Enrollment>[].obs;
   RxInt lastIdReport = 0.obs;
   RxInt indexVdo = 1.obs;
@@ -58,11 +62,11 @@ class EnrollmentService extends GetxService {
         subjectId: playlist.subjectId,
         enrollmentDate: DateTime.now(),
         progress: List.generate(
-          playlist.vdoDetail.length,
+          playlist.videos.length,
           (index) => ProgressEnrollment(
             progressId: index,
             userId: Get.find<UserService>().currentUser.value.user_id,
-            videoId: playlist.vdoDetail[index].id,
+            videoId: playlist.videos[index].videoId,
             enrollmentId: lastIdReport.value,
             progressPercentage: 0,
             lastViewedTimestamp: DateTime.now(),
@@ -103,6 +107,60 @@ class EnrollmentService extends GetxService {
     } else {
       // Invalid YouTube URL
       throw Exception('Invalid YouTube URL');
+    }
+  }
+
+  Future<List<Enrollment>> getEnrolmentsByUserId() async {
+    try {
+      List<Enrollment> fetchedEnrollments =
+          await enrollmentRepository.getEnrolmentsByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+      List<ProgressEnrollment> fetchedProgress =
+          await progessEnrollmentRepository.getProgressByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+      //map fetchedProgress  with fetchedEnrollments
+      fetchedEnrollments.forEach((enrollment) {
+        enrollment.progress = fetchedProgress
+            .where(
+                (progress) => progress.enrollmentId == enrollment.enrollmentId)
+            .toList();
+      });
+
+      enrollments.value = fetchedEnrollments;
+      // print("Enrollments fetched: ${enrollments.toJson()}");
+      return fetchedEnrollments;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  //getList progess by user id
+  Future<void> getProgressByUserId() async {
+    try {
+      List<ProgressEnrollment> fetchedProgress =
+          await progessEnrollmentRepository.getProgressByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+      // print("Enrollments fetched: ${enrollments.toJson()}");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //update persentage use progress Repository
+  Future<List<Enrollment>> updatePersentageProgress(
+      ProgressEnrollment progressEnrollment) async {
+    try {
+      await progessEnrollmentRepository
+          .updatePersentageProgress(progressEnrollment);
+      Get.find<EnrollmentService>().enrollments.value =
+          await enrollmentRepository.getEnrolmentsByUserId(
+              Get.find<UserService>().getCurrentUser().user_id);
+
+      return Get.find<EnrollmentService>().enrollments;
+    } catch (e) {
+      print('Error update progress: $e');
+      throw Exception('Failed to update progress');
     }
   }
 }

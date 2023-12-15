@@ -37,7 +37,7 @@ class _PlaylistViewState extends State<PlaylistView> {
         var regExp = RegExp(
             r'^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})');
 
-        var match = regExp.firstMatch(vdourl.videoUrl);
+        var match = regExp.firstMatch(vdourl.videoURL);
         if (match != null && match.groupCount >= 1) {
           var vdourl_ = match.group(1);
           var video = await ytClient.videos.get(yt.VideoId(vdourl_.toString()));
@@ -55,78 +55,88 @@ class _PlaylistViewState extends State<PlaylistView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Obx(
-            () => Text('${subjectService.currentPlaylist.value.description}')),
+        backgroundColor: Color(0xff551E68),
+        title: Obx(() => Text(
+            '${subjectService.currentPlaylist.value.subjectName}',
+            style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold))),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
-        children: [
-          VdoPageView(),
-          SizedBox(height: 10.0),
-          Expanded(
-            // Add an Expanded widget
-            child: FutureBuilder(
-              key: Key(Get.find<EnrollmentService>().getCurrentVdo()),
-              future: fetchAllVideoData(Get.find<VdoDetailService>()
-                  .currentSubject
-                  .value
-                  .vdoDetail
-                  .toList()),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData ||
-                    (snapshot.data as List).isEmpty) {
-                  return Center(child: Text('No videos available.'));
-                } else {
-                  List<yt.Video> videos = snapshot.data as List<yt.Video>;
-
-                  return ListView.builder(
-                    itemCount: videos.length,
-                    itemBuilder: (context, index) {
-                      var video = videos[index];
-                      var thumbnailUrl = video.thumbnails.highResUrl ?? '';
-
-                      return ListTile(
-                        leading: Image.network(thumbnailUrl),
-                        title: Text(video.title),
-                        subtitle: Text(video.author),
-                        onTap: () {
-                          Get.find<EnrollmentService>().currentVdoId.value =
-                              Get.find<VdoDetailService>()
-                                  .currentSubject
-                                  .value
-                                  .vdoDetail[index]
-                                  .id;
-                          print(
-                              "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
-                          Get.find<VdoDetailService>().setCurrentVdo(
-                              Get.find<VdoDetailService>()
-                                  .currentSubject
-                                  .value
-                                  .vdoDetail
-                                  .toList()[index]);
-                          Get.find<VdoPageController>().loadVideo(
-                              Get.find<VdoDetailService>()
-                                  .currentSubject
-                                  .value
-                                  .vdoDetail
-                                  .toList()[index]
-                                  .videoId);
-
-                          print(
-                              "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
-                        },
-                      );
-                    },
-                  );
-                }
-              },
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 2,
+              child: VdoPageView(),
             ),
-          ),
-        ],
+            Expanded(
+              flex: 3,
+              child: FutureBuilder(
+                key: Key(Get.find<EnrollmentService>().getCurrentVdo()),
+                future: fetchAllVideoData(Get.find<VdoDetailService>()
+                    .currentSubject
+                    .value
+                    .videos
+                    .toList()),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData ||
+                      (snapshot.data as List).isEmpty) {
+                    return Center(child: Text('No videos available.'));
+                  } else {
+                    List<yt.Video> videos = snapshot.data as List<yt.Video>;
+
+                    return ListView.builder(
+                      itemCount: videos.length,
+                      itemBuilder: (context, index) {
+                        var video = videos[index];
+                        var thumbnailUrl = video.thumbnails.highResUrl ?? '';
+
+                        return ListTile(
+                          leading: Image.network(thumbnailUrl),
+                          title: Text(video.title),
+                          subtitle: Text(video.author),
+                          onTap: () {
+                            Get.find<EnrollmentService>().currentVdoId.value =
+                                Get.find<VdoDetailService>()
+                                    .currentSubject
+                                    .value
+                                    .videos[index]
+                                    .videoId;
+                            print(
+                                "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
+                            Get.find<VdoDetailService>().setCurrentVdo(
+                                Get.find<VdoDetailService>()
+                                    .currentSubject
+                                    .value
+                                    .videos
+                                    .toList()[index]);
+                            Get.find<VdoPageController>().loadVideo(
+                                Get.find<VdoDetailService>()
+                                    .currentSubject
+                                    .value
+                                    .videos
+                                    .toList()[index]
+                                    .videoCode);
+
+                            print(
+                                "currentVdoId: ${Get.find<EnrollmentService>().currentVdoId.value}");
+                          },
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

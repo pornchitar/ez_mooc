@@ -1,37 +1,57 @@
-class VdoDetail {
-  int id;
-  String videoId;
-  String videoTitle;
-  String videoUrl;
-  String channelName;
-  String thumbnail;
+import 'package:ez_mooc/app/data/model/category_model.dart';
 
-  VdoDetail({
-    required this.id,
-    required this.videoId,
-    required this.videoTitle,
-    required this.videoUrl,
-    required this.channelName,
-    required this.thumbnail,
-  });
+class VdoDetail {
+  int videoId;
+  int subjectId;
+  String videoTitle;
+  String videoURL;
+  String thumbnail;
+  String channelName;
+  String videoCode;
+  String createdAt;
+  String updatedAt;
+  List<Category> category;
+
+  VdoDetail(
+      {required this.videoId,
+      required this.subjectId,
+      required this.videoTitle,
+      required this.videoURL,
+      required this.thumbnail,
+      required this.channelName,
+      required this.videoCode,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.category});
 
   factory VdoDetail.fromJson(Map<String, dynamic> json) {
     return VdoDetail(
-      id: json['id'],
-      videoId: json['videoId'],
-      videoTitle: json['videoTitle'],
-      videoUrl: json['videoUrl'],
-      channelName: json['channelName'],
-      thumbnail: json['thumbnail'],
+      videoId: json['VideoID'] ?? 0,
+      subjectId: json['SubjectID'] ?? 0,
+      videoTitle: json['VideoTitle'] ?? '',
+      videoURL: json['VideoURL'] ?? '',
+      thumbnail: json['Thumbnail'] ?? '',
+      channelName: json['ChannelName'] ?? '',
+      videoCode: json['VideoCode'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
+      category: (json['category'] as List<dynamic>?)
+              ?.map((categoryJson) => Category.fromJson(categoryJson))
+              .toList() ??
+          [],
     );
   }
-
+  //to json
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'videoId': videoId,
-        'videoTitle': videoTitle,
-        'videoUrl': videoUrl,
-        'channelName': channelName,
-        'thumbnail': thumbnail,
+        "VideoID": videoId,
+        "SubjectID": subjectId,
+        "VideoTitle": videoTitle,
+        "VideoURL": videoURL,
+        "Thumbnail": thumbnail,
+        "ChannelName": channelName,
+        "VideoCode": videoCode,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
+        "category": List<dynamic>.from(category.map((x) => x.toJson())),
       };
 }

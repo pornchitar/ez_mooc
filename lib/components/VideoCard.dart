@@ -1,10 +1,14 @@
 import 'dart:ffi';
 
+import 'package:card_loading/card_loading.dart';
 import 'package:ez_mooc/app/data/model/subject_model.dart';
 import 'package:ez_mooc/app/data/model/vdo_detail_model.dart';
+import 'package:ez_mooc/services/subject_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 class VideoCard extends StatelessWidget {
   final String videoUrl;
@@ -17,18 +21,24 @@ class VideoCard extends StatelessWidget {
       future: extractPlaylistInfo(videoUrl),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            child: CircularProgressIndicator(),
-            width: 30,
-            height: 30,
+          return SkeletonLoader(
+            builder: _buildSkeletonLoader(),
+            items: 10, // Number of skeleton loaders
+            period: Duration(seconds: 2), // Duration of the animation loop
           );
         } else if (snapshot.hasError) {
           return Text('Error loading video details');
         } else if (snapshot.hasData) {
           VdoDetail vdoDetail = snapshot.data!;
+          var subject = Get.find<SubjectService>().playlists.firstWhere(
+              (element) => element.subjectId == vdoDetail.subjectId);
 
           return _buildVideoCard(
-              vdoDetail, snapshot.data!.videoTitle, snapshot.data!.channelName);
+            vdoDetail,
+            snapshot.data!.videoTitle,
+            snapshot.data!.channelName,
+            subject.description,
+          );
         } else {
           return Text('Unknown error occurred');
         }
@@ -36,19 +46,72 @@ class VideoCard extends StatelessWidget {
     );
   }
 
+  Widget _buildSkeletonLoader() {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 5.0,
+      child: CardLoading(
+        height: 80,
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        width: 100,
+        margin: EdgeInsets.only(bottom: 10),
+      ),
+    );
+  }
+
   Widget _buildVideoCard(
     VdoDetail vdoDetail,
     String namePlaylist,
     String authorPlaylist,
+    String descriptionPlaylist,
   ) {
-    print(namePlaylist);
-    return Container(
+    return Card(
       margin: EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 5.0,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
+          Container(
+              height: 70.0,
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              decoration: BoxDecoration(
+                color: Colors.white, // Choose a color for the header
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                ),
+              ),
+              width: double.infinity,
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.play_circle_outline,
+                    color: Colors.red,
+                    size: 35,
+                  ),
+                  SizedBox(width: 8.0),
+                  Expanded(
+                    child: Text(
+                      '${authorPlaylist} • ${_formatUploadDate(DateTime.now())}',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.more_vert),
+                ],
+              )),
           ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.only(
+                // topLeft: Radius.circular(10.0),
+                // topRight: Radius.circular(10.0),
+                ),
             child: Image.network(
               vdoDetail.thumbnail ?? '',
               height: 200.0,
@@ -56,30 +119,54 @@ class VideoCard extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          SizedBox(height: 8.0),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              children: [
-                Icon(Icons.library_music, color: Colors.black),
-                SizedBox(width: 8.0),
-                Expanded(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    // Icon(Icons.library_music, color: Colors.black),
+                    SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        namePlaylist,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    namePlaylist,
+                    descriptionPlaylist,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Icon(
+                      Icons.favorite_outline,
+                      color: const Color.fromARGB(255, 248, 47, 47),
+                      size: 35,
+                    ),
+                    SizedBox(width: 8.0),
+                    Icon(
+                      Icons.bookmark_outline,
+                      color: Color.fromARGB(255, 231, 143, 27),
+                      size: 35,
+                    )
+                  ],
+                ),
               ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              '${authorPlaylist} • ${_formatUploadDate(DateTime.now())}',
             ),
           ),
         ],
@@ -110,24 +197,31 @@ Future<VdoDetail> extractPlaylistInfo(String playlistUrl) async {
     var firstVideo = await ytClient.playlists.getVideos(playlistId).first;
 
     var vdoDetail = VdoDetail(
-      id: 1,
-      videoId: playlistId.value,
-      videoTitle: playlist.title,
-      videoUrl: firstVideo.url.toString(),
-      channelName: playlist.author,
-      thumbnail: firstVideo.thumbnails.highResUrl,
-    );
+        category: [],
+        videoId: 1,
+        subjectId: 1,
+        videoTitle: playlist.title,
+        videoURL: firstVideo.url.toString(),
+        thumbnail: firstVideo.thumbnails.highResUrl,
+        channelName: playlist.author,
+        videoCode: '',
+        createdAt: '',
+        updatedAt: '');
 
     return vdoDetail;
   } catch (e) {
     print('Error: $e');
     return VdoDetail(
-        id: -1,
-        videoId: "",
-        videoTitle: "",
-        videoUrl: "",
-        channelName: "",
-        thumbnail: "");
+        category: [],
+        videoId: 1,
+        subjectId: 1,
+        videoTitle: '',
+        videoURL: '',
+        thumbnail: '',
+        channelName: '',
+        videoCode: '',
+        createdAt: '',
+        updatedAt: '');
   } finally {
     ytClient.close();
   }
